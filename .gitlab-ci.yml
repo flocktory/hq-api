@@ -1,0 +1,24 @@
+variables:
+  MAVEN_GROUP: ru.flocktory
+  MAVEN_NAME: api.hq
+  MAVEN_LINK: link-to-nexus-maven-repo
+
+stages:
+  - publish
+
+publish-maven-server-stub:
+  image: openjdk:13
+  stage: publish
+  only:
+    refs:
+      - tags
+      # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+      - /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+  before_script:
+    - export MAVEN_VERSION=$CI_COMMIT_TAG
+    - sed 's/VERSION_FROM_CI/'"$MAVEN_VERSION"'/' spec/api-hq.yaml > api-hq.yaml
+    - mv api-hq.yaml spec/api-hq.yaml
+  script:
+    - ./gradlew openApiGenerate
+    - mv build/generated/src/main/ ./src/main
+    - ./gradlew publish
