@@ -5,8 +5,8 @@ plugins {
     id("maven-publish")
 }
 
-val mavenName = System.getenv("MAVEN_NAME") ?: "api.hq"
-group = System.getenv("MAVEN_GROUP") ?: "ru.flocktory"
+val mavenName = "api.hq"
+group = "ru.flocktory"
 version = System.getenv("MAVEN_VERSION") ?: "0.0.1"
 val mavenLink = System.getenv("MAVEN_LINK") ?: ""
 

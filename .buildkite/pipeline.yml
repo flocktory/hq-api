@@ -1,0 +1,15 @@
+env:
+  MAVEN_LINK: link-to-maven-repo
+
+steps:
+  - label: 'Publish'
+    commands:
+      - "export MAVEN_VERSION=0.0.1" # Как получить git tag name внутри CI Job?
+      - "sed 's/VERSION_FROM_CI/'\"$MAVEN_VERSION\"'/' spec/api-hq.yaml > api-hq.yaml"
+      - "mv api-hq.yaml spec/api-hq.yaml"
+      - "./gradlew openApiGenerate"
+      - "mv build/generated/src/main/ ./src/main"
+      - "./gradlew jar"
+    plugins:
+      - docker#v20.10.14:
+          image: "openjdk:13"
