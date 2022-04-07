@@ -5,7 +5,7 @@ steps:
   - label: 'Publish'
     commands:
       - "export MAVEN_VERSION=0.0.1" # Как получить git tag name внутри CI Job?
-      - "ls"
+      - "ls -la"
       - "cd spec"
       - "cat api-hq.yaml"
       - "sed 's/VERSION_FROM_CI/'\"$MAVEN_VERSION\"'/' ./spec/api-hq.yaml > api-hq.yaml"
