@@ -2,12 +2,11 @@ env:
   MAVEN_REPOSITORY_LINK: https://nexus.flocktory.com/nexus/content/repositories/releases/
   NEXUS_USERNAME: deployment
   NEXUS_PASSWORD: deployment123
-  API_VERSION: 0.0.1
 
 steps:
   - label: 'Publish'
     commands:
-      #      - "export API_VERSION=$BUILDKITE_TAG"
+      - "export API_VERSION=$BUILDKITE_TAG"
       - "sed 's/VERSION_FROM_CI/'\"$API_VERSION\"'/' spec/api-hq.yaml > api-hq.yaml"
       - "mv api-hq.yaml spec/api-hq.yaml"
       - "./gradlew openApiGenerate"
@@ -22,4 +21,5 @@ steps:
             - MAVEN_REPOSITORY_LINK
             - NEXUS_USERNAME
             - NEXUS_PASSWORD
-            - API_VERSION
+    # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+    if: "build.tag =~ /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/"
