@@ -8,6 +8,7 @@ steps:
       - "mkdir /tmp/test-results/$BUILDKITE_JOB_ID"
       - "cp -r $(pwd) /tmp/test-results/$BUILDKITE_JOB_ID"
       - "ls -alt /tmp/test-results/$BUILDKITE_JOB_ID/hq-api"
+  - wait
 
   - label: 'Publish'
     commands:
@@ -26,3 +27,4 @@ steps:
 #            - "/var/run/docker.sock:/var/run/docker.sock"
             - "/tmp/test-results/$BUILDKITE_JOB_ID/hq-api:/workdir"
           propagate-environment: true
+          mount-checkout: false
