@@ -4,7 +4,8 @@ env:
 steps:
   - label: 'Publish'
     commands:
-      - "export MAVEN_VERSION=0.0.1" # Как получить git tag name внутри CI Job?
+#      - "export MAVEN_VERSION=0.0.1" # Как получить git tag name внутри CI Job?
+      - "java --version"
       - "ls -la"
       - "cd spec"
       - "cat api-hq.yaml"
