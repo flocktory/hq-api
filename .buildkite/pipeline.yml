@@ -18,5 +18,5 @@ steps:
           image: "openjdk:13"
           volumes:
             - "/var/run/docker.sock:/var/run/docker.sock"
-            - "/var/buildkite/builds:/var/buildkite/builds"
+            - "/buildkite/builds:/buildkite/builds"
           propagate-environment: true
