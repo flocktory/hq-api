@@ -3,6 +3,8 @@ env:
 
 steps:
   - label: 'Check'
+    agents:
+      selector: "data"
     commands:
       - "ls -alt ./"
       - "mkdir /tmp/test-results/$BUILDKITE_JOB_ID"
@@ -11,6 +13,8 @@ steps:
   - wait
 
   - label: 'Publish'
+    agents:
+      selector: "data"
     commands:
       - "export MAVEN_VERSION=0.0.1" # Как получить git tag name внутри CI Job?
       - "ls -la ./"
