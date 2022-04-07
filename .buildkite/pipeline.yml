@@ -5,8 +5,7 @@ env:
 
 steps:
   - label: Publish
-    # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-    if: build.tag =~ /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?\$/
+    if: build.tag != null
     commands:
       - export API_VERSION=$BUILDKITE_TAG
       - sed 's/VERSION_FROM_CI/'\"$API_VERSION\"'/' spec/api-hq.yaml > api-hq.yaml
