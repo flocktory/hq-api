@@ -4,14 +4,16 @@ env:
   NEXUS_PASSWORD: deployment123
 
 steps:
-  - label: 'Publish'
+  - label: Publish
+    # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+    if: build.tag =~ /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
     commands:
-      - "export API_VERSION=$BUILDKITE_TAG"
-      - "sed 's/VERSION_FROM_CI/'\"$API_VERSION\"'/' spec/api-hq.yaml > api-hq.yaml"
-      - "mv api-hq.yaml spec/api-hq.yaml"
-      - "./gradlew openApiGenerate"
-      - "mv build/generated/src/main/ ./src/main"
-      - "./gradlew publish"
+      - export API_VERSION=$BUILDKITE_TAG
+      - sed 's/VERSION_FROM_CI/'\"$API_VERSION\"'/' spec/api-hq.yaml > api-hq.yaml
+      - mv api-hq.yaml spec/api-hq.yaml
+      - ./gradlew openApiGenerate
+      - mv build/generated/src/main/ ./src/main
+      - ./gradlew publish
     plugins:
       - docker-compose#v3.9.0:
           run: openjdk
@@ -21,5 +23,3 @@ steps:
             - MAVEN_REPOSITORY_LINK
             - NEXUS_USERNAME
             - NEXUS_PASSWORD
-    # https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-    if: "build.tag =~ /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/"
