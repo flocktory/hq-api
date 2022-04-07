@@ -28,3 +28,4 @@ steps:
             - "/tmp/test-results/$BUILDKITE_JOB_ID/hq-api:/workdir"
           propagate-environment: true
           mount-checkout: false
+          workdir: /workdir
