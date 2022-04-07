@@ -5,6 +5,7 @@ steps:
   - label: 'Publish'
     commands:
 #      - "export MAVEN_VERSION=0.0.1" # Как получить git tag name внутри CI Job?
+      - "docker-compose --version"
       - "pwd"
       - "ls -la"
       - "cd spec"
