@@ -2,13 +2,19 @@ env:
   MAVEN_LINK: link-to-maven-repo
 
 steps:
+  - label: 'Check'
+    commands:
+      - "ls -alt ./"
+      - "mkdir /tmp/test-results/$BUILDKITE_JOB_ID"
+      - "cp -r $(pwd) /tmp/test-results/$BUILDKITE_JOB_ID"
+      - "ls -alt /tmp/test-results/$BUILDKITE_JOB_ID/hq-api"
+
   - label: 'Publish'
     commands:
       - "export MAVEN_VERSION=0.0.1" # Как получить git tag name внутри CI Job?
-      - "ls -la"
-      - "cd spec"
+      - "ls -la ./"
+      - "sed 's/VERSION_FROM_CI/'\"$BUILDKITE_COMMIT\"'/' spec/api-hq.yaml > api-hq.yaml"
       - "cat api-hq.yaml"
-      - "sed 's/VERSION_FROM_CI/'\"$MAVEN_VERSION\"'/' spec/api-hq.yaml > api-hq.yaml"
       - "mv api-hq.yaml spec/api-hq.yaml"
       - "./gradlew openApiGenerate"
       - "mv build/generated/src/main/ ./src/main"
@@ -17,6 +23,6 @@ steps:
       - docker#v3.12.0:
           image: "openjdk:13"
           volumes:
-            - "/var/run/docker.sock:/var/run/docker.sock"
-            - "/buildkite/builds:/buildkite/builds"
+#            - "/var/run/docker.sock:/var/run/docker.sock"
+            - "/tmp/test-results/$BUILDKITE_JOB_ID/hq-api:/workdir"
           propagate-environment: true
