@@ -6,9 +6,8 @@ plugins {
 }
 
 val mavenName = "api.hq"
-group = "ru.flocktory"
-version = System.getenv("MAVEN_VERSION") ?: "0.0.1"
-val mavenLink = System.getenv("MAVEN_LINK") ?: ""
+group = "com.flocktory"
+version = System.getenv("API_VERSION") ?: "0.0.1"
 
 repositories {
     mavenCentral()
@@ -42,18 +41,13 @@ openApiGenerate {
     )
 }
 
-
-
 publishing {
     repositories {
         maven {
-            url = uri(mavenLink)
-            credentials(HttpHeaderCredentials::class) {
-                name = "Job-Token"
-                value = System.getenv("CI_JOB_TOKEN")
-            }
-            authentication {
-                create<HttpHeaderAuthentication>("header")
+            url = uri(System.getenv("MAVEN_REPOSITORY_LINK"))
+            credentials(PasswordCredentials::class) {
+                username = System.getenv("NEXUS_USERNAME")
+                password = System.getenv("NEXUS_PASSWORD")
             }
         }
     }
