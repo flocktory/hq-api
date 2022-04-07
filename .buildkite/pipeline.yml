@@ -1,5 +1,7 @@
 env:
-  MAVEN_LINK: link-to-maven-repo
+  MAVEN_LINK: https://nexus.flocktory.com/nexus/content/repositories/releases/
+  NEXUS_USERNAME: deployment
+  NEXUS_PASSWORD: deployment123
 
 steps:
   - label: 'Publish'
@@ -7,11 +9,13 @@ steps:
       - "export MAVEN_VERSION=$BUILDKITE_BRANCH"
       - "echo $MAVEN_VERSION"
       - "echo $MAVEN_LINK"
+      - "echo $NEXUS_USERNAME"
       - "sed 's/VERSION_FROM_CI/'\"$MAVEN_VERSION\"'/' spec/api-hq.yaml > api-hq.yaml"
       - "mv api-hq.yaml spec/api-hq.yaml"
       - "./gradlew openApiGenerate"
       - "mv build/generated/src/main/ ./src/main"
       - "./gradlew jar"
+      - "./gradlew publish -PmySecureRepositoryUsername=$NEXUS_USERNAME -PmySecureRepositoryPassword=$NEXUS_PASSWORD"
     plugins:
       - docker-compose#v3.9.0:
           run: openjdk
@@ -20,3 +24,5 @@ steps:
             - BUILDKITE_TAG
             - BUILDKITE_BRANCH
             - MAVEN_LINK
+            - NEXUS_USERNAME
+            - NEXUS_PASSWORD

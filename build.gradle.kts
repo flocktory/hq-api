@@ -48,13 +48,7 @@ publishing {
     repositories {
         maven {
             url = uri(mavenLink)
-            credentials(HttpHeaderCredentials::class) {
-                name = "Job-Token"
-                value = System.getenv("CI_JOB_TOKEN")
-            }
-            authentication {
-                create<HttpHeaderAuthentication>("header")
-            }
+            credentials(PasswordCredentials::class)
         }
     }
     publications {
