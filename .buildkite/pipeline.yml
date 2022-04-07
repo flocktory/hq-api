@@ -13,8 +13,8 @@ steps:
       - "./gradlew openApiGenerate"
       - "mv build/generated/src/main/ ./src/main"
       - "./gradlew jar"
-    plugins:
-      - docker#v3.12.0:
-          image: "openjdk:13"
-          mount-checkout: true
-          propagate-environment: true
+#    plugins:
+#      - docker#v3.12.0:
+#          image: "openjdk:13"
+#          mount-checkout: true
+#          propagate-environment: true
