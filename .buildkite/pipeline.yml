@@ -4,10 +4,19 @@ env:
 steps:
   - label: 'Publish'
     commands:
-      - "java --version"
-      - "pwd"
-      - "ls -la"
+      - "export MAVEN_VERSION=$BUILDKITE_BRANCH"
+      - "echo $MAVEN_VERSION"
+      - "echo $MAVEN_LINK"
+      - "sed 's/VERSION_FROM_CI/'\"$MAVEN_VERSION\"'/' spec/api-hq.yaml > api-hq.yaml"
+      - "mv api-hq.yaml spec/api-hq.yaml"
+      - "./gradlew openApiGenerate"
+      - "mv build/generated/src/main/ ./src/main"
+      - "./gradlew jar"
     plugins:
       - docker-compose#v3.9.0:
           run: openjdk
           config: docker-compose.ci.yml
+          env:
+            - BUILDKITE_TAG
+            - BUILDKITE_BRANCH
+            - MAVEN_LINK
