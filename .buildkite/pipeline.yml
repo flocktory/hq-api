@@ -16,3 +16,5 @@ steps:
     plugins:
       - docker#v3.12.0:
           image: "openjdk:13"
+          mount-checkout: true
+          propagate-environment: true
