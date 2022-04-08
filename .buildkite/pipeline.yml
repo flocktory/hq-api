@@ -2,14 +2,6 @@ env:
   MAVEN_REPOSITORY_LINK: https://nexus.flocktory.com/nexus/content/repositories/releases/
 
 steps:
-  - label: "Add Secrets"
-    if: build.tag != null
-    plugins:
-      - seek-oss/aws-sm#v2.3.1:
-          region: eu-west-1
-          json-to-env:
-            - secret-id: "/prod/services/nexus"
-  - wait
   - label: Publish
     if: build.tag != null
     commands:
@@ -20,6 +12,10 @@ steps:
       - mv build/generated/src/main/ ./src/main
       - ./gradlew publish
     plugins:
+      - seek-oss/aws-sm#v2.3.1:
+          region: eu-west-1
+          json-to-env:
+            - secret-id: "/prod/services/nexus"
       - docker-compose#v3.9.0:
           run: openjdk
           config: docker-compose.ci.yml
@@ -28,3 +24,4 @@ steps:
             - MAVEN_REPOSITORY_LINK
             - NEXUS_USERNAME
             - NEXUS_PASSWORD
+
