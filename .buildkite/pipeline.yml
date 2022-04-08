@@ -1,9 +1,18 @@
 env:
   MAVEN_REPOSITORY_LINK: https://nexus.flocktory.com/nexus/content/repositories/releases/
-  NEXUS_USERNAME: deployment
-  NEXUS_PASSWORD: deployment123
 
 steps:
+  - label: "Add Secrets"
+    #    if: build.tag != null
+    commands:
+      - echo $NEXUS_USERNAME
+      - echo $NEXUS_PASSWORD
+    plugins:
+      - seek-oss/aws-sm#v2.3.1:
+          region: eu-west-1
+          json-to-env:
+            - secret-id: "/prod/services/nexus"
+  - wait
   - label: Publish
     if: build.tag != null
     commands:
