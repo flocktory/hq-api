@@ -3,10 +3,7 @@ env:
 
 steps:
   - label: "Add Secrets"
-    #    if: build.tag != null
-    commands:
-      - echo $NEXUS_USERNAME
-      - echo $NEXUS_PASSWORD
+    if: build.tag != null
     plugins:
       - seek-oss/aws-sm#v2.3.1:
           region: eu-west-1
