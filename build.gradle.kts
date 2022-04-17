@@ -121,11 +121,11 @@ tasks.register(generateJavaClient, GenerateTask::class) {
         }
         copy {
             from(layout.buildDirectory.dir("generated/docs"))
-            into(layout.projectDirectory.dir("src/resources/docs"))
+            into(layout.projectDirectory.dir("src/main/resources/docs"))
         }
         copy {
             from(layout.buildDirectory.file("generated/api/openapi.yaml"))
-            into(layout.projectDirectory.dir("src/resources"))
+            into(layout.projectDirectory.dir("src/main/resources"))
         }
     }
 }
