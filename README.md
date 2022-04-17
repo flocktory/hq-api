@@ -1,4 +1,8 @@
 # HQ-API
+[![Build status](https://badge.buildkite.com/0fe799557524156ea9af30ae2c94161708c93fc9ee7f714b89.svg)](https://buildkite.com/flock-build/hq-api)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/flocktory/hq-api?include_prereleases)
+[![Server](https://img.shields.io/badge/server-hq--svc-blue)](https://github.com/flocktory/hq-svc)
+
 HQ OpenAPI Specification and Client &amp; Server SDK Generators
 
 ### Cloning Github Repository
