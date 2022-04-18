@@ -45,7 +45,7 @@ steps:
     commands:
 #      - export API_VERSION=0.0.1
 #      - ./gradlew generateJavaScriptClient -Ptype=Client
-      - buildkite-agent artifact upload build/tar/hq-api-js-client.tar
+      - buildkite-agent artifact upload hq-api-js-client.tar
     plugins:
       - seek-oss/aws-sm#v2.3.1:
           region: eu-west-1
@@ -68,11 +68,10 @@ steps:
   - wait
   - label: JavaScriptCLientPublish
     commands:
+      - buildkite-agent artifact download hq-api-js-client.tar hq-api-js-client
+      - cd hq-api-js-client && tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
       - npm-cli-login -u $$NPM_USER -p $$NPM_PASS -e $$NPM_EMAIL -r $$NPM_REGISTRY
-      - buildkite-agent artifact download build/tar/hq-api-js-client.tar .
-      - cd build/tar/
-      - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
-      - npm install babel
+      - npm install babel-cli babel-core
       - npm publish
     plugins:
       - seek-oss/aws-sm#v2.3.1:
