@@ -55,7 +55,6 @@ steps:
           json-to-env:
             - secret-id: "/prod/services/nexus"
             - secret-id: "/prod/services/buildkite"
-            - secret-id: "/prod/services/npm"
       - docker-compose#v3.9.0:
           run: openjdk
           config: docker-compose.ci.yml
@@ -74,8 +73,26 @@ steps:
 #    if: build.branch == "main"
     commands:
       - npm --version
+      - tar --version
+      - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
+      - npm install -g npm-cli-login
+#      - ~/.buildkite-agent/bin/buildkite-agent artifact download hq-api-js-client.tar
     plugins:
+      - seek-oss/aws-sm#v2.3.1:
+          region: eu-west-1
+          json-to-env:
+            - secret-id: "/prod/services/buildkite"
+            - secret-id: "/prod/services/npm"
       - docker#v3.12.0:
           image: "node:17"
           always-pull: true
           mount-checkout: false
+          environment:
+            - "TOKEN"
+            - "BUILDKITE_TAG"
+            - "BUILDKITE_JOB_ID"
+            - "BUILDKITE_BUILD_ID"
+            - "BUILDKITE_AGENT_ACCESS_TOKEN"
+            - "NPM_USER"
+            - "NPM_PASSWORD"
+            - "NPM_EMAIL"
