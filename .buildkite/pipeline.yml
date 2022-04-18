@@ -72,9 +72,8 @@ steps:
 #  - wait
   - label: JavaScriptCLientPublish
     commands:
-#      - export API_VERSION=$BUILDKITE_TAG
-      - export API_VERSION=0.0.1
-      - npm --version
+      - npm-cli-login -u $$NPM_USER -p $$NPM_PASS -e $$NPM_EMAIL -r $$NPM_REGISTRY
+      - ls -la
     plugins:
       - seek-oss/aws-sm#v2.3.1:
           region: eu-west-1
