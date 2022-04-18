@@ -75,10 +75,11 @@ steps:
     commands:
       - npm install -g npm-cli-login
       - npm-cli-login -u $$NPM_USER -p $$NPM_PASS -e $$NPM_EMAIL -r $$NPM_REGISTRY
-      - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
+#      - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
 #      - ~/.buildkite-agent/bin/buildkite-agent artifact download hq-api-js-client.tar
       - cd build/tar/
       - tar -xf hq-api-js-client.tar
+      - buildkite-agent --help
       - npm publish
     plugins:
       - seek-oss/aws-sm#v2.3.1:
@@ -89,7 +90,8 @@ steps:
       - docker#v3.12.0:
           image: "node:17"
           always-pull: true
-          mount-checkout: false
+          mount-checkout: true
+          mount-buildkite-agent: true
           environment:
             - "TOKEN"
             - "BUILDKITE_TAG"
