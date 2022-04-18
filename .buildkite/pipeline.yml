@@ -77,7 +77,7 @@ steps:
       - npm-cli-login -u $$NPM_USER -p $$NPM_PASS -e $$NPM_EMAIL -r $$NPM_REGISTRY
       - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
 #      - ~/.buildkite-agent/bin/buildkite-agent artifact download hq-api-js-client.tar
-      - cd build/tar
+      - cd cd build/tar/
       - tar -xf hq-api-js-client.tar
       - npm publish
     plugins:
