@@ -82,7 +82,7 @@ steps:
             - secret-id: "/prod/services/npm"
       - docker-compose#v3.9.0:
           run: node
-          config: ci/js/docker-compose.yml
+          config: docker-compose.ci.yml
           args:
             - TOKEN=$TOKEN
           env:
