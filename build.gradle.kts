@@ -23,6 +23,7 @@ val artifactName = when (type) {
 val groupName = "com.flocktory.api"
 val versionValue = System.getenv("API_VERSION") ?: "unknown"
 val generateJavaClient = "generateJavaClient"
+val generateJavaScriptClient = "generateJavaScriptClient"
 val generateServerStub = "generateServerStub"
 val spotlessJavaApply = "spotlessJavaApply"
 val prepareVersion = "prepareVersion"
@@ -131,6 +132,25 @@ tasks.register(generateJavaClient, GenerateTask::class) {
 }
 tasks.getByPath(generateJavaClient).dependsOn(prepareVersion)
 tasks.getByPath(generateJavaClient).finalizedBy(spotlessJavaApply)
+
+tasks.register(generateJavaScriptClient, GenerateTask::class) {
+    group = "openapi tools"
+    groupId.set(groupName)
+    generatorName.set("javascript")
+    inputSpec.set("$rootDir/spec/api-hq.yaml")
+    outputDir.set("$buildDir/hq-api-js-client")
+    apiPackage.set("$groupName.$artifactName.service")
+    invokerPackage.set("$groupName.$artifactName")
+    modelPackage.set("$groupName.$artifactName.model")
+    configOptions.set(
+        mapOf(
+            "emitModelMethods" to "true",
+            "npmRepository" to "https://nexus3.flocktory.com/repository/npm-hosted/",
+            "projectName" to "@flocktory/hq-api"
+        )
+    )
+}
+tasks.getByPath(generateJavaScriptClient).dependsOn(prepareVersion)
 
 spotless {
     java {
