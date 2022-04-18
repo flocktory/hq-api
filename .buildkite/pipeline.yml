@@ -42,28 +42,28 @@ steps:
   #            - NEXUS_PASSWORD
   - label: JavaScriptCLientGenerate
       #      if: build.tag != null
-      commands:
-        #        - export API_VERSION=$BUILDKITE_TAG
-        - export API_VERSION=0.0.1
-        - ./gradlew generateJavaScriptClient -Ptype=Client
-        - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
-        - ~/.buildkite-agent/bin/buildkite-agent artifact upload build/hq-api-js-client
-      plugins:
-        - seek-oss/aws-sm#v2.3.1:
-            region: eu-west-1
-            json-to-env:
-              - secret-id: "/prod/services/nexus"
-              - secret-id: "/prod/services/buildkite"
-        - docker-compose#v3.9.0:
-            run: openjdk
-            config: docker-compose.ci.yml
-            env:
-              - BUILDKITE_TAG
-              - MAVEN_REPOSITORY_LINK
-              - NEXUS_USERNAME
-              - NEXUS_PASSWORD
-              - TOKEN
-              - BUILDKITE_BRANCH
-              - BUILDKITE_JOB_ID
-              - BUILDKITE_BUILD_ID
-              - BUILDKITE_AGENT_ACCESS_TOKEN
+    commands:
+      #        - export API_VERSION=$BUILDKITE_TAG
+      - export API_VERSION=0.0.1
+      - ./gradlew generateJavaScriptClient -Ptype=Client
+      - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
+      - ~/.buildkite-agent/bin/buildkite-agent artifact upload build/hq-api-js-client
+    plugins:
+      - seek-oss/aws-sm#v2.3.1:
+          region: eu-west-1
+          json-to-env:
+            - secret-id: "/prod/services/nexus"
+            - secret-id: "/prod/services/buildkite"
+      - docker-compose#v3.9.0:
+          run: openjdk
+          config: docker-compose.ci.yml
+          env:
+            - BUILDKITE_TAG
+            - MAVEN_REPOSITORY_LINK
+            - NEXUS_USERNAME
+            - NEXUS_PASSWORD
+            - TOKEN
+            - BUILDKITE_BRANCH
+            - BUILDKITE_JOB_ID
+            - BUILDKITE_BUILD_ID
+            - BUILDKITE_AGENT_ACCESS_TOKEN
