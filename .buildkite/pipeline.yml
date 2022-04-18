@@ -1,6 +1,6 @@
 env:
-  MAVEN_REPOSITORY_LINK: https://nexus.flocktory.com/nexus/content/repositories/releases/
-  NPN_REPOSITORY_LINK: https://nexus3.flocktory.com/repository/npm-hosted/
+  MAVEN_REGISTRY: https://nexus.flocktory.com/nexus/content/repositories/releases/
+  NPM_REGISTRY: https://nexus3.flocktory.com/repository/npm-hosted/
 
 steps:
 #  - label: ServerStub
@@ -19,7 +19,7 @@ steps:
   #          config: docker-compose.ci.yml
   #          env:
   #            - BUILDKITE_TAG
-  #            - MAVEN_REPOSITORY_LINK
+  #            - MAVEN_REGISTRY
   #            - NEXUS_USERNAME
   #            - NEXUS_PASSWORD
   #  - label: JavaCLient
@@ -38,46 +38,44 @@ steps:
   #          config: docker-compose.ci.yml
   #          env:
   #            - BUILDKITE_TAG
-  #            - MAVEN_REPOSITORY_LINK
+  #            - MAVEN_REGISTRY
   #            - NEXUS_USERNAME
   #            - NEXUS_PASSWORD
-  - label: JavaScriptCLientGenerate
-      #      if: build.tag != null
-    commands:
-      #        - export API_VERSION=$BUILDKITE_TAG
-      - export API_VERSION=0.0.1
-      - ./gradlew generateJavaScriptClient -Ptype=Client
-      - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
-      - mv build/tar/hq-api-js-client.tar hq-api-js-client.tar
-      - ~/.buildkite-agent/bin/buildkite-agent artifact upload hq-api-js-client.tar
-    plugins:
-      - seek-oss/aws-sm#v2.3.1:
-          region: eu-west-1
-          json-to-env:
-            - secret-id: "/prod/services/nexus"
-            - secret-id: "/prod/services/buildkite"
-      - docker-compose#v3.9.0:
-          run: openjdk
-          config: docker-compose.ci.yml
-          env:
-            - BUILDKITE_TAG
-            - MAVEN_REPOSITORY_LINK
-            - NEXUS_USERNAME
-            - NEXUS_PASSWORD
-            - TOKEN
-            - BUILDKITE_BRANCH
-            - BUILDKITE_JOB_ID
-            - BUILDKITE_BUILD_ID
-            - BUILDKITE_AGENT_ACCESS_TOKEN
+#  - label: JavaScriptCLientGenerate
+#      #      if: build.tag != null
+#    commands:
+#      #        - export API_VERSION=$BUILDKITE_TAG
+#      - export API_VERSION=0.0.1
+#      - ./gradlew generateJavaScriptClient -Ptype=Client
+#      - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
+#      - mv build/tar/hq-api-js-client.tar hq-api-js-client.tar
+#      - ~/.buildkite-agent/bin/buildkite-agent artifact upload hq-api-js-client.tar
+#    plugins:
+#      - seek-oss/aws-sm#v2.3.1:
+#          region: eu-west-1
+#          json-to-env:
+#            - secret-id: "/prod/services/nexus"
+#            - secret-id: "/prod/services/buildkite"
+#      - docker-compose#v3.9.0:
+#          run: openjdk
+#          config: docker-compose.ci.yml
+#          env:
+#            - BUILDKITE_TAG
+#            - MAVEN_REGISTRY
+#            - NEXUS_USERNAME
+#            - NEXUS_PASSWORD
+#            - TOKEN
+#            - BUILDKITE_BRANCH
+#            - BUILDKITE_JOB_ID
+#            - BUILDKITE_BUILD_ID
+#            - BUILDKITE_AGENT_ACCESS_TOKEN
 #  - wait
   - label: JavaScriptCLientPublish
 #    if: build.branch == "main"
     commands:
-      - npm --version
-      - tar --version
-      - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
       - npm install -g npm-cli-login
-      - npm-cli-login -u $NPM_USER -p $NPM_PASSWORD -e $NPM_EMAIL -r $NPN_REPOSITORY_LINK
+      - npm-cli-login -u $NPM_USER -p $NPM_PASS -e $NPM_EMAIL -r $NPN_REPOSITORY_LINK
+      - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
 #      - ~/.buildkite-agent/bin/buildkite-agent artifact download hq-api-js-client.tar
     plugins:
       - seek-oss/aws-sm#v2.3.1:
@@ -96,6 +94,6 @@ steps:
             - "BUILDKITE_BUILD_ID"
             - "BUILDKITE_AGENT_ACCESS_TOKEN"
             - "NPM_USER"
-            - "NPM_PASSWORD"
+            - "NPM_PASS"
             - "NPM_EMAIL"
-            - "NPN_REPOSITORY_LINK"
+            - "NPM_REGISTRY"
