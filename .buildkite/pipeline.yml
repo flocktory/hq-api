@@ -72,6 +72,7 @@ steps:
       - buildkite-agent artifact download build/tar/hq-api-js-client.tar .
       - cd build/tar/
       - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
+      - npm install babel
       - npm publish
     plugins:
       - seek-oss/aws-sm#v2.3.1:
