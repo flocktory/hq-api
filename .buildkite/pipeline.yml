@@ -82,7 +82,7 @@ steps:
             - secret-id: "/prod/services/buildkite"
             - secret-id: "/prod/services/npm"
       - docker-compose#v3.9.0:
-          run: openjdk
+          run: node
           config: ci/js/docker-compose.yml
           args:
             - TOKEN=$TOKEN
