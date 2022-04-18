@@ -68,7 +68,7 @@ steps:
   - wait
   - label: JavaScriptCLientPublish
     commands:
-      - buildkite-agent artifact download hq-api-js-client.tar hq-api-js-client
+      - buildkite-agent artifact download hq-api-js-client.tar .
       - cd hq-api-js-client && tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
       - npm-cli-login -u $$NPM_USER -p $$NPM_PASS -e $$NPM_EMAIL -r $$NPM_REGISTRY
       - npm install babel-cli babel-core
