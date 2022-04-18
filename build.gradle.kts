@@ -147,7 +147,8 @@ tasks.register(generateJavaScriptClient, GenerateTask::class) {
         mapOf(
             "emitModelMethods" to "true",
             "npmRepository" to "https://nexus3.flocktory.com/repository/npm-hosted/",
-            "projectName" to "@flocktory/hq-api"
+            "projectName" to "@flocktory/hq-api",
+            "projectVersion" to versionValue
         )
     )
 }

@@ -74,3 +74,4 @@ fabric.properties
 
 .gradle/
 build/
+!build/tar/hq-api-js-client.tar
