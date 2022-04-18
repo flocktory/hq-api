@@ -2,7 +2,7 @@
 openapi: 3.0.0
 info:
   title: HQ API Spesification
-  version: API_VERSION
+  version: unknown
 externalDocs:
   description: OpenAPI Specification
   url: https://swagger.io/specification/
