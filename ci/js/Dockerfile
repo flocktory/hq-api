@@ -4,7 +4,7 @@ WORKDIR /usr/src/hq-api
 ARG TOKEN
 ENV TOKEN=$TOKEN
 RUN bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
-RUN ls -la
-RUN cp .buildkite-agent/bin/buildkite-agent /usr/local/bin
+RUN cp /root/.buildkite-agent/bin/buildkite-agent /usr/local/bin
 RUN npm install -g npm-cli-login
+RUN buildkite-agent --help
 CMD /bin/sh
