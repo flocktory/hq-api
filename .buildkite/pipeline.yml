@@ -74,3 +74,8 @@ steps:
 #    if: build.branch == "main"
     commands:
       - npm --version
+    plugins:
+      - docker#v3.12.0:
+          image: "node:8"
+          always-pull: true
+          mount-checkout: false
