@@ -1,5 +1,5 @@
 FROM node:17
-COPY ../../. /usr/src/hq-api
+COPY . /usr/src/hq-api
 WORKDIR /usr/src/hq-api
 ARG TOKEN
 ENV TOKEN=$TOKEN
