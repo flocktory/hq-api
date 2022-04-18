@@ -73,7 +73,10 @@ steps:
   - label: JavaScriptCLientPublish
     commands:
       - npm-cli-login -u $$NPM_USER -p $$NPM_PASS -e $$NPM_EMAIL -r $$NPM_REGISTRY
-      - ls -la
+      - cd build/tar/
+      - tar -xf hq-api-js-client.tar
+      - rm hq-api-js-client.tar
+      - npm publish
     plugins:
       - seek-oss/aws-sm#v2.3.1:
           region: eu-west-1
