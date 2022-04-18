@@ -1,6 +1,4 @@
 FROM node:17
-COPY . /usr/src/hq-api
-WORKDIR /usr/src/hq-api
 ARG TOKEN
 ENV TOKEN=$TOKEN
 RUN bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
