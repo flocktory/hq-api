@@ -1,5 +1,6 @@
 env:
   MAVEN_REPOSITORY_LINK: https://nexus.flocktory.com/nexus/content/repositories/releases/
+  NPN_REPOSITORY_LINK: https://nexus3.flocktory.com/repository/npm-hosted/
 
 steps:
 #  - label: ServerStub
@@ -76,6 +77,7 @@ steps:
       - tar --version
       - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
       - npm install -g npm-cli-login
+      - npm-cli-login -u $NPM_USER -p $NPM_PASSWORD -e $NPM_EMAIL -r $NPN_REPOSITORY_LINK
 #      - ~/.buildkite-agent/bin/buildkite-agent artifact download hq-api-js-client.tar
     plugins:
       - seek-oss/aws-sm#v2.3.1:
@@ -96,3 +98,4 @@ steps:
             - "NPM_USER"
             - "NPM_PASSWORD"
             - "NPM_EMAIL"
+            - "NPN_REPOSITORY_LINK"
