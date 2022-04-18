@@ -76,6 +76,6 @@ steps:
       - npm --version
     plugins:
       - docker#v3.12.0:
-          image: "node:8"
+          image: "node:17"
           always-pull: true
           mount-checkout: false
