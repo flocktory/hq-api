@@ -24,6 +24,7 @@ val groupName = "com.flocktory.api"
 val versionValue = System.getenv("API_VERSION") ?: "unknown"
 val generateJavaClient = "generateJavaClient"
 val generateJavaScriptClient = "generateJavaScriptClient"
+val archiveJavaScriptClient = "archiveJavaScriptClient"
 val generateServerStub = "generateServerStub"
 val spotlessJavaApply = "spotlessJavaApply"
 val prepareVersion = "prepareVersion"
@@ -151,6 +152,15 @@ tasks.register(generateJavaScriptClient, GenerateTask::class) {
     )
 }
 tasks.getByPath(generateJavaScriptClient).dependsOn(prepareVersion)
+tasks.getByPath(generateJavaScriptClient).finalizedBy(archiveJavaScriptClient)
+
+tasks.register(archiveJavaScriptClient, Tar::class) {
+    from("build/hq-api-js-client")
+    destinationDirectory.set(file("build/tar"))
+    archiveFileName.set("hq-api-js-client.tar")
+    include("*", "*/*", "*/*/*", "*/*/*/*")
+    compression = Compression.NONE
+}
 
 spotless {
     java {
