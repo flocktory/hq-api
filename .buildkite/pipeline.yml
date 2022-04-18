@@ -74,7 +74,7 @@ steps:
 #    if: build.branch == "main"
     commands:
       - npm install -g npm-cli-login
-      - npm-cli-login -u $NPM_USER -p $NPM_PASS -e $NPM_EMAIL -r $NPN_REPOSITORY_LINK
+      - npm-cli-login -u $NPM_USER -p $NPM_PASS -e $NPM_EMAIL -r $NPM_REGISTRY
       - bash -c "`curl -sL https://raw.githubusercontent.com/buildkite/agent/main/install.sh`"
 #      - ~/.buildkite-agent/bin/buildkite-agent artifact download hq-api-js-client.tar
     plugins:
