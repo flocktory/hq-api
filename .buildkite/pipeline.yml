@@ -57,7 +57,7 @@ steps:
             - secret-id: "/prod/services/nexus"
             - secret-id: "/prod/services/buildkite"
       - docker-compose#v3.9.0:
-          run: node
+          run: openjdk
           config: docker-compose.ci.yml
           args:
             - TOKEN=$TOKEN
