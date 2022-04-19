@@ -157,7 +157,7 @@ tasks.getByPath(generateJavaScriptClient).finalizedBy(archiveJavaScriptClient)
 
 tasks.register(archiveJavaScriptClient, Tar::class) {
     from("build/hq-api-js-client")
-    destinationDirectory.set(file("build/tar"))
+    destinationDirectory.set(file(rootDir))
     archiveFileName.set("hq-api-js-client.tar")
     include("*", "*/*", "*/*/*", "*/*/*/*")
     compression = Compression.NONE
