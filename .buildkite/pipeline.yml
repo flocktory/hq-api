@@ -83,6 +83,8 @@ steps:
 #      - buildkite-agent artifact download hq-api-js-client.tar .
       - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
       - npm install babel-cli babel-core
+      - echo $NPM_TOKEN
+      - echo $$NPM_TOKEN
       - echo "//$NPM_REGISTRY:_authToken=NpmToken.$NPM_TOKEN" > .npmrc
       - cat .npmrc
       - npm publish --registry=$NPM_REGISTRY
