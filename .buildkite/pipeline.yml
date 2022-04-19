@@ -3,11 +3,20 @@ env:
   NPM_REGISTRY: nexus3.flocktory.com/repository/npm-hosted/
 
 steps:
-  - label: ServerStub
-#      if: build.tag != null
+  - label: VerifySpecification
     commands:
-#      - export API_VERSION=$BUILDKITE_TAG
-      - export API_VERSION=0.0.5
+      - ./gradlew verifySpecification
+    plugins:
+      - docker-compose#v3.9.0:
+          run: openjdk
+          config: docker-compose.ci.yml
+          env:
+            - MAVEN_REGISTRY
+  - wait
+  - label: PublishServerStub
+    if: build.tag != null
+    commands:
+      - export API_VERSION=$BUILDKITE_TAG
       - ./gradlew generateServerStub -Ptype=Server
       - ./gradlew publish -Ptype=Server
     plugins:
@@ -23,11 +32,10 @@ steps:
             - MAVEN_REGISTRY
             - NEXUS_USERNAME
             - NEXUS_PASSWORD
-  - label: JavaCLient
-#    if: build.tag != null
+  - label: PublishJavaClient
+    if: build.tag != null
     commands:
-#      - export API_VERSION=$BUILDKITE_TAG
-      - export API_VERSION=0.0.5
+      - export API_VERSION=$BUILDKITE_TAG
       - ./gradlew generateJavaClient -Ptype=Client
       - ./gradlew publish -Ptype=Client
     plugins:
@@ -43,11 +51,10 @@ steps:
             - MAVEN_REGISTRY
             - NEXUS_USERNAME
             - NEXUS_PASSWORD
-  - label: JavaScriptCLientGenerate
-#    if: build.tag != null
+  - label: GenerateJavaScriptCLient
+    if: build.tag != null
     commands:
-#      - export API_VERSION=$BUILDKITE_TAG
-      - export API_VERSION=0.0.5
+      - export API_VERSION=$BUILDKITE_TAG
       - ./gradlew generateJavaScriptClient -Ptype=Client
       - buildkite-agent artifact upload hq-api-js-client.tar
     plugins:
@@ -70,8 +77,8 @@ steps:
             - BUILDKITE_BUILD_ID
             - BUILDKITE_AGENT_ACCESS_TOKEN
   - wait
-  - label: JavaScriptCLientPublish
-#    if: build.tag != null
+  - label: PublishJavaScriptCLient
+    if: build.tag != null
     commands:
       - buildkite-agent artifact download hq-api-js-client.tar .
       - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar

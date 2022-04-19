@@ -21,7 +21,8 @@ val artifactName = when (type) {
     GenerationType.Unknown -> "hq.unknown"
 }
 val groupName = "com.flocktory.api"
-val versionValue = System.getenv("API_VERSION") ?: "unknown"
+val versionValue = System.getenv("API_VERSION") ?: "0.0.0"
+val verifySpecification = "verifySpecification"
 val generateJavaClient = "generateJavaClient"
 val generateJavaScriptClient = "generateJavaScriptClient"
 val archiveJavaScriptClient = "archiveJavaScriptClient"
@@ -76,6 +77,14 @@ tasks.register(prepareVersion) {
     }
     delete("$rootDir/spec/temp")
 }
+
+tasks.register(verifySpecification, GenerateTask::class) {
+    group = "openapi tools"
+    inputSpec.set("$rootDir/spec/api-hq.yaml")
+    outputDir.set("$buildDir/generated")
+    generatorName.set("java")
+}
+tasks.getByPath(verifySpecification).dependsOn(prepareVersion)
 
 tasks.register(generateServerStub, GenerateTask::class) {
     group = "openapi tools"

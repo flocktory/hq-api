@@ -1,7 +1,9 @@
 # HQ-API
 [![Build status](https://badge.buildkite.com/0fe799557524156ea9af30ae2c94161708c93fc9ee7f714b89.svg)](https://buildkite.com/flock-build/hq-api)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/flocktory/hq-api?include_prereleases)
-[![Server](https://img.shields.io/badge/server-hq--svc-blue)](https://github.com/flocktory/hq-svc)
+[![service](https://img.shields.io/badge/service-hq--svc-blue)](https://github.com/flocktory/hq-svc)
+[![npm](https://img.shields.io/badge/npm-hq--client-blue)](https://nexus3.flocktory.com/service/rest/repository/browse/npm-hosted/%40flocktory/hq-api/)
+[![maven](https://img.shields.io/badge/maven-hq--client-blue)](https://nexus.flocktory.com/nexus/content/groups/public/com/flocktory/api/hq.client/)
 
 HQ OpenAPI Specification and Client &amp; Server SDK Generators
 
