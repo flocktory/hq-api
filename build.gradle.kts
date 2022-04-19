@@ -186,7 +186,7 @@ spotless {
 publishing {
     repositories {
         maven {
-            url = uri(System.getenv("MAVEN_REGISTRY"))
+            url = uri(System.getenv("MAVEN_REGISTRY") ?: "")
             credentials(PasswordCredentials::class) {
                 username = System.getenv("NEXUS_USERNAME")
                 password = System.getenv("NEXUS_PASSWORD")
