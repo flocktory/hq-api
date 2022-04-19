@@ -3,3 +3,8 @@ services:
   openjdk:
     build:
       context: .
+      dockerfile: openjdk.Dockerfile
+  node:
+    build:
+      context: .
+      dockerfile: node.Dockerfile

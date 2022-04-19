@@ -21,8 +21,11 @@ val artifactName = when (type) {
     GenerationType.Unknown -> "hq.unknown"
 }
 val groupName = "com.flocktory.api"
-val versionValue = System.getenv("API_VERSION") ?: "unknown"
+val versionValue = System.getenv("API_VERSION") ?: "0.0.0"
+val verifySpecification = "verifySpecification"
 val generateJavaClient = "generateJavaClient"
+val generateJavaScriptClient = "generateJavaScriptClient"
+val archiveJavaScriptClient = "archiveJavaScriptClient"
 val generateServerStub = "generateServerStub"
 val spotlessJavaApply = "spotlessJavaApply"
 val prepareVersion = "prepareVersion"
@@ -74,6 +77,14 @@ tasks.register(prepareVersion) {
     }
     delete("$rootDir/spec/temp")
 }
+
+tasks.register(verifySpecification, GenerateTask::class) {
+    group = "openapi tools"
+    inputSpec.set("$rootDir/spec/api-hq.yaml")
+    outputDir.set("$buildDir/generated")
+    generatorName.set("java")
+}
+tasks.getByPath(verifySpecification).dependsOn(prepareVersion)
 
 tasks.register(generateServerStub, GenerateTask::class) {
     group = "openapi tools"
@@ -132,6 +143,35 @@ tasks.register(generateJavaClient, GenerateTask::class) {
 tasks.getByPath(generateJavaClient).dependsOn(prepareVersion)
 tasks.getByPath(generateJavaClient).finalizedBy(spotlessJavaApply)
 
+tasks.register(generateJavaScriptClient, GenerateTask::class) {
+    group = "openapi tools"
+    groupId.set(groupName)
+    generatorName.set("javascript")
+    inputSpec.set("$rootDir/spec/api-hq.yaml")
+    outputDir.set("$buildDir/hq-api-js-client")
+    apiPackage.set("$groupName.$artifactName.service")
+    invokerPackage.set("$groupName.$artifactName")
+    modelPackage.set("$groupName.$artifactName.model")
+    configOptions.set(
+        mapOf(
+            "emitModelMethods" to "true",
+            "npmRepository" to "https://nexus3.flocktory.com/repository/npm-hosted/",
+            "projectName" to "@flocktory/hq-api",
+            "projectVersion" to versionValue
+        )
+    )
+}
+tasks.getByPath(generateJavaScriptClient).dependsOn(prepareVersion)
+tasks.getByPath(generateJavaScriptClient).finalizedBy(archiveJavaScriptClient)
+
+tasks.register(archiveJavaScriptClient, Tar::class) {
+    from("build/hq-api-js-client")
+    destinationDirectory.set(file(rootDir))
+    archiveFileName.set("hq-api-js-client.tar")
+    include("*", "*/*", "*/*/*", "*/*/*/*")
+    compression = Compression.NONE
+}
+
 spotless {
     java {
         googleJavaFormat("1.8").aosp().reflowLongStrings()
@@ -146,7 +186,7 @@ spotless {
 publishing {
     repositories {
         maven {
-            url = uri(System.getenv("MAVEN_REPOSITORY_LINK") ?: "unknown")
+            url = uri(System.getenv("MAVEN_REGISTRY"))
             credentials(PasswordCredentials::class) {
                 username = System.getenv("NEXUS_USERNAME")
                 password = System.getenv("NEXUS_PASSWORD")
