@@ -83,11 +83,9 @@ steps:
 #      - buildkite-agent artifact download hq-api-js-client.tar .
       - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
       - npm install babel-cli babel-core
-      - echo $NPM_TOKEN
-      - echo $$NPM_TOKEN
-      - echo "//$NPM_REGISTRY:_authToken=NpmToken.$NPM_TOKEN" > .npmrc
+      - echo "//$NPM_REGISTRY:_authToken=NpmToken.$$NPM_TOKEN" > .npmrc
       - cat .npmrc
-      - npm publish --registry=$NPM_REGISTRY
+      - npm publish --registry=https://$NPM_REGISTRY
     plugins:
       - seek-oss/aws-sm#v2.3.1:
           region: eu-west-1
