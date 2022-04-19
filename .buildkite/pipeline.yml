@@ -84,6 +84,7 @@ steps:
       - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
       - npm install babel-cli babel-core
       - echo "//$NPM_REGISTRY:_authToken=NpmToken.$NPM_TOKEN" > .npmrc
+      - cat .npmrc
       - npm publish --registry=$NPM_REGISTRY
     plugins:
       - seek-oss/aws-sm#v2.3.1:
