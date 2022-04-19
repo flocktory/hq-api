@@ -70,9 +70,10 @@ steps:
     commands:
       - buildkite-agent artifact download hq-api-js-client.tar .
       - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
-      - npm-cli-login -u $$NPM_USER -p $$NPM_PASS -e $$NPM_EMAIL -r $$NPM_REGISTRY
       - npm install babel-cli babel-core
-      - npm publish
+      - npm-cli-login -u npm-api-publisher -p bzxnhfMFkrqzqlAsQmrdcE -e dev@flocktory.com -r https://nexus3.flocktory.com/repository/npm-hosted/
+#      - npm-cli-login -u $$NPM_USER -p $$NPM_PASS -e $$NPM_EMAIL -r $$NPM_REGISTRY
+      - npm publish --registry=https://nexus3.flocktory.com/repository/npm-hosted/
     plugins:
       - seek-oss/aws-sm#v2.3.1:
           region: eu-west-1
