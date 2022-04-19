@@ -5,24 +5,24 @@ env:
 steps:
   - label: ServerStub
 #      if: build.tag != null
-      commands:
-#        - export API_VERSION=$BUILDKITE_TAG
-        - export API_VERSION=0.0.5
-        - ./gradlew generateServerStub -Ptype=Server
-        - ./gradlew publish -Ptype=Server
-      plugins:
-        - seek-oss/aws-sm#v2.3.1:
-            region: eu-west-1
-            json-to-env:
-              - secret-id: "/prod/services/nexus"
-        - docker-compose#v3.9.0:
-            run: openjdk
-            config: docker-compose.ci.yml
-            env:
-              - BUILDKITE_TAG
-              - MAVEN_REGISTRY
-              - NEXUS_USERNAME
-              - NEXUS_PASSWORD
+    commands:
+#      - export API_VERSION=$BUILDKITE_TAG
+      - export API_VERSION=0.0.5
+      - ./gradlew generateServerStub -Ptype=Server
+      - ./gradlew publish -Ptype=Server
+    plugins:
+      - seek-oss/aws-sm#v2.3.1:
+          region: eu-west-1
+          json-to-env:
+            - secret-id: "/prod/services/nexus"
+      - docker-compose#v3.9.0:
+          run: openjdk
+          config: docker-compose.ci.yml
+          env:
+            - BUILDKITE_TAG
+            - MAVEN_REGISTRY
+            - NEXUS_USERNAME
+            - NEXUS_PASSWORD
   - label: JavaCLient
 #    if: build.tag != null
     commands:
