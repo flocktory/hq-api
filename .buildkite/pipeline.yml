@@ -1,6 +1,7 @@
 env:
   MAVEN_REGISTRY: https://nexus.flocktory.com/nexus/content/repositories/releases/
   NPM_REGISTRY: https://nexus3.flocktory.com/repository/npm-hosted/
+  NPM_TOKEN: 5d2a3b0f-cfeb-3503-9453-e6705136285a
 
 steps:
 #  - label: ServerStub
@@ -71,9 +72,9 @@ steps:
       - buildkite-agent artifact download hq-api-js-client.tar .
       - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
       - npm install babel-cli babel-core
-      - echo "//nexus3.flocktory.com/repository/npm-hosted/:_authToken=NpmToken.5d2a3b0f-cfeb-3503-9453-e6705136285a" > .npmrc
+      - echo "//$NPM_REGISTRY/:_authToken=NpmToken.$NPM_TOKEN" > .npmrc
       - cat .npmrc
-      - npm publish --registry=https://nexus3.flocktory.com/repository/npm-hosted/
+      - npm publish --registry=$NPM_REGISTRY
     plugins:
       - seek-oss/aws-sm#v2.3.1:
           region: eu-west-1
@@ -94,3 +95,4 @@ steps:
             - NPM_PASS
             - NPM_EMAIL
             - NPM_REGISTRY
+            - NPM_TOKEN
