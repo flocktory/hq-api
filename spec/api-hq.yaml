@@ -9,50 +9,148 @@ externalDocs:
 servers:
   - url: https://hq.api.floctory.ru/
 tags:
-  - name: user
-    description: Operations about user
+  - name: country
+    description: Operations about country
 paths:
-  /user:
+  /country:
     post:
       tags:
-        - user
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
+        - country
+      summary: Create country
+      operationId: createCountry
       requestBody:
-        description: Created user object
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/Country"
         required: true
       responses:
         default:
           description: successful operation
 components:
   schemas:
-    User:
+    Country:
       type: object
       properties:
-        login:
+        id:
+          type: integer
+        name:
+          description: "Official country name in English"
           type: string
-        personalData:
-          $ref: '#/components/schemas/PersonalData'
-        contactInformation:
-          $ref: '#/components/schemas/ContactInformation'
-    PersonalData:
+        alternativeName:
+          description: "Additional country name for internal usage"
+          type: string
+        locale:
+          $ref: "#/components/schemas/Locale"
+        currency:
+          $ref: "#/components/schemas/Currency"
+        timezone:
+          $ref: "#/components/schemas/Timezone"
+        accountingSettings:
+          $ref: "#/components/schemas/AccountingSettings"
+        priceFormatting:
+          $ref: "#/components/schemas/PriceFormatting"
+        countryСode:
+          $ref: "#/components/schemas/CountryCode"
+    AccountingSettings:
       type: object
       properties:
-        firstName:
-          type: string
-        secondName:
-          type: string
-        surname:
-          type: string
-    ContactInformation:
+        extendTermsPeriod:
+          type: integer
+          minimum: 0
+          maximum: 30
+        issueDaysShift:
+          type: integer
+          minimum: 0
+          maximum: 30
+        defaultDueDaysShift:
+          type: integer
+          minimum: 0
+          maximum: 30
+        invoiceEndDateOffset:
+          type: integer
+          minimum: 0
+          maximum: 30
+        accountantEmails:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Email'
+        shouldSendPaid:
+          type: boolean
+        shouldNotifyAccountants:
+          type: boolean
+    PriceFormatting:
       type: object
+      description: "Object for storage price formatting settings for country"
       properties:
-        email:
+        priceFormatCurrency:
+          description: >
+            Format for price, use %n - represent numeric value and
+            %u - represent currency and add other format symbols.
+          example: "%n %u"
+          format: ^\%n.*\%u$
           type: string
-        phone:
+        priceFormatPercent:
+          description: >
+            Format for discounts, use %n - represent numeric value and
+            %u - represent percent sign and add other format symbols.
+          example: "%n%u"
+          format: ^\%n.*\%u$
           type: string
+        invoiceFormatCurrency:
+          description: >
+            Format for prices in invoices, use %n - represent numeric value and
+            %u - represent currency and add other format symbols.
+          example: "%n"
+          format: ^(\%n.*\%u)|(\%n)$
+          type: string
+        invoiceFormatPercent:
+          description: >
+            Format for percent in invoices, use %n - represent numeric value and
+            %u - represent percent sign and add other format symbols.
+          example: "%n%u"
+          format: ^\%n.*\%u$
+          type: string
+        invoiceCurrencyPrecision:
+          type: integer
+          description:  Float precision in invoices for currency
+          minimum: 0
+          maximum: 4
+        invoicePercentPrecision:
+          type: integer
+          description: Float precision in invoices for percent
+          minimum: 0
+          maximum: 4
+    Currency:
+      type: string
+      description: >
+        Official currency of the country.
+        As value Use 3 letter code in UPPER CASE from <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>
+      pattern: ^[A-Z]{3}$
+    Locale:
+      type: string
+      description: >
+        Locale is a set of parameters that defines the user's language,
+        region and any special variant preferences that the user wants to see in their user interface.
+        For value use 2 letter code from <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1</a>
+      pattern: ^[a-z]{2}$
+    Timezone:
+      type: string
+      description: >
+        <a href="https://en.wikipedia.org/wiki/Time_zone">Time zone</a> is an area that observes a uniform standard
+        time for legal, commercial and social purposes.
+        For this object use value from column "TZ database name"
+        from <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">database of time zones</a>
+        with type canonical
+    CountryCode:
+      type: string
+      description: >
+        Codes for the representation
+        of names of countries and their subdivisions. This property uses
+        <a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes">ISO 3166-1</a> alpha-2
+        codes (two-letter country codes)
+      pattern: ^[A-Z]{2}$
+    Email:
+      type: string
+      description: Email address. Pattern is the regex uses all the characters permitted by RFC 5322
+      pattern: ^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$
