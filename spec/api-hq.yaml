@@ -152,9 +152,11 @@ components:
             Official country name in English. Use list of country names from
             <a href="https://www.iban.com/country-codes">ISO 3166</a>
           type: string
+          example: "United States of America (the)"
         alternativeName:
           description: "Additional country name for internal usage"
           type: string
+          example: "United States of America"
         locale:
           $ref: "#/components/schemas/Locale"
         currency:
@@ -184,11 +186,13 @@ components:
             Official country name in English. Use list of country names from
             <a href="https://www.iban.com/country-codes">ISO 3166</a>
           type: string
+          example: "United States of America (the)"
           minLength: 4
           maxLength: 25
         alternativeName:
           description: "Additional country name for internal usage"
           type: string
+          example: "United States of America"
           minLength: 2
           maxLength: 25
         locale:
@@ -322,6 +326,7 @@ components:
             properties:
               message:
                 type: string
+                example: "Some Validation error for CountryData"
               error:
                 type: string
                 enum:
@@ -339,6 +344,8 @@ components:
               requestId:
                 description: Uniuqe request identifier
                 type: string
+                example: "6341c870-c23a-11ec-a6d6-0800200c9a66"
               message:
                 description: Description of the exception
                 type: string
+                example: "Internal Server Exception"
