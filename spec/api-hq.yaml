@@ -9,50 +9,343 @@ externalDocs:
 servers:
   - url: https://hq.api.floctory.ru/
 tags:
-  - name: user
-    description: Operations about user
+  - name: country
+    description: Operations about country
 paths:
-  /user:
+  /country:
     post:
       tags:
-        - user
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
+        - country
+      summary: Create country
+      operationId: createCountry
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+        400:
+          $ref: "#/components/responses/400CountryDataValidationError"
+        500:
+          $ref: "#/components/responses/500UnknownException"
       requestBody:
-        description: Created user object
+        $ref: "#/components/requestBodies/CountryDataRequest"
+  /country/{id}:
+    get:
+      tags:
+        - country
+      summary: Find Country by ID
+      description: Returns a single Country
+      operationId: getCountryById
+      parameters:
+        - name: id
+          in: path
+          description: ID of country to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+        400:
+          description: Invalid Country ID supplied
+        404:
+          description: Country not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
+    put:
+      tags:
+        - country
+      summary: Updates data for country
+      operationId: updateCountry
+      parameters:
+        - name: id
+          in: path
+          description: ID of country that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+        400:
+          $ref: "#/components/responses/400CountryDataValidationError"
+        404:
+          description: Country not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
+      requestBody:
+        $ref: "#/components/requestBodies/CountryDataRequest"
+  /country/{id}/settings:
+    put:
+      tags:
+        - country
+      summary: Updates settings for country
+      operationId: updateCountrySettings
+      parameters:
+        - name: id
+          in: path
+          description: ID of country that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+        404:
+          description: Country not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-        required: true
+              type: object
+              properties:
+                accountingSettings:
+                  $ref: "#/components/schemas/AccountingSettings"
+                priceFormatting:
+                  $ref: "#/components/schemas/PriceFormatting"
+  /countries:
+    get:
+      tags:
+        - country
+      summary: Get all contries
+      description: Returns all Countries
+      operationId: getCountries
       responses:
-        default:
+        200:
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: "#/components/schemas/Country"
+        500:
+          $ref: "#/components/responses/500UnknownException"
 components:
   schemas:
-    User:
+    Country:
       type: object
       properties:
-        login:
+        id:
+          type: integer
+        name:
+          description: >
+            Official country name in English. Use list of country names from
+            <a href="https://www.iban.com/country-codes">ISO 3166</a>
           type: string
-        personalData:
-          $ref: '#/components/schemas/PersonalData'
-        contactInformation:
-          $ref: '#/components/schemas/ContactInformation'
-    PersonalData:
+          example: "United States of America (the)"
+        alternativeName:
+          description: "Additional country name for internal usage"
+          type: string
+          example: "United States of America"
+        locale:
+          $ref: "#/components/schemas/Locale"
+        currency:
+          $ref: "#/components/schemas/Currency"
+        timezone:
+          $ref: "#/components/schemas/Timezone"
+        accountingSettings:
+          $ref: "#/components/schemas/AccountingSettings"
+        priceFormatting:
+          $ref: "#/components/schemas/PriceFormatting"
+        countryСode:
+          $ref: "#/components/schemas/CountryCode"
+    CountryData:
+      type: object
+      required:
+        - name
+        - alternativeName
+        - locale
+        - currency
+        - timezone
+      description: >
+        Updatable part of <a href="#/components/schemas/Country">country</a>.
+        Also used for country creation.
+      properties:
+        name:
+          description: >
+            Official country name in English. Use list of country names from
+            <a href="https://www.iban.com/country-codes">ISO 3166</a>
+          type: string
+          example: "United States of America (the)"
+          minLength: 4
+          maxLength: 25
+        alternativeName:
+          description: "Additional country name for internal usage"
+          type: string
+          example: "United States of America"
+          minLength: 2
+          maxLength: 25
+        locale:
+          $ref: "#/components/schemas/Locale"
+        currency:
+          $ref: "#/components/schemas/Currency"
+        timezone:
+          $ref: "#/components/schemas/Timezone"
+    AccountingSettings:
       type: object
       properties:
-        firstName:
-          type: string
-        secondName:
-          type: string
-        surname:
-          type: string
-    ContactInformation:
+        extendTermsPeriod:
+          type: integer
+          minimum: 0
+          maximum: 30
+        issueDaysShift:
+          type: integer
+          minimum: 0
+          maximum: 30
+        defaultDueDaysShift:
+          type: integer
+          minimum: 0
+          maximum: 30
+        invoiceEndDateOffset:
+          type: integer
+          minimum: 0
+          maximum: 30
+        accountantEmails:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/Email"
+        shouldSendPaid:
+          type: boolean
+        shouldNotifyAccountants:
+          type: boolean
+    PriceFormatting:
       type: object
+      description: "Object for storage price formatting settings for country"
       properties:
-        email:
+        priceFormatCurrency:
+          description: >
+            Format for price, use %n - represent numeric value and
+            %u - represent currency and add other format symbols.
+          example: "%n %u"
+          format: ^\%n.*\%u$
           type: string
-        phone:
+        priceFormatPercent:
+          description: >
+            Format for discounts, use %n - represent numeric value and
+            %u - represent percent sign and add other format symbols.
+          example: "%n%u"
+          format: ^\%n.*\%u$
           type: string
+        invoiceFormatCurrency:
+          description: >
+            Format for prices in invoices, use %n - represent numeric value and
+            %u - represent currency and add other format symbols.
+          example: "%n"
+          format: ^(\%n.*\%u)|(\%n)$
+          type: string
+        invoiceFormatPercent:
+          description: >
+            Format for percent in invoices, use %n - represent numeric value and
+            %u - represent percent sign and add other format symbols.
+          example: "%n%u"
+          format: ^\%n.*\%u$
+          type: string
+        invoiceCurrencyPrecision:
+          type: integer
+          description:  Float precision in invoices for currency
+          minimum: 0
+          maximum: 4
+        invoicePercentPrecision:
+          type: integer
+          description: Float precision in invoices for percent
+          minimum: 0
+          maximum: 4
+    Currency:
+      type: string
+      description: >
+        Official currency of the country.
+        As value Use 3 letter code in UPPER CASE from <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>
+      pattern: ^[A-Z]{3}$
+      example: "USD"
+    Locale:
+      type: string
+      description: >
+        Locale is a set of parameters that defines the user's language,
+        region and any special variant preferences that the user wants to see in their user interface.
+        For value use 2 letter code from <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1</a>
+      pattern: ^[a-z]{2}$
+      example: "en"
+    Timezone:
+      type: string
+      description: >
+        <a href="https://en.wikipedia.org/wiki/Time_zone">Time zone</a> is an area that observes a uniform standard
+        time for legal, commercial and social purposes.
+        For this object use value from column "TZ database name"
+        from <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">database of time zones</a>
+        with type canonical
+      example: "America/Los_Angeles"
+    CountryCode:
+      type: string
+      description: >
+        Codes for the representation
+        of names of countries and their subdivisions. This property uses
+        <a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes">ISO 3166-1</a> alpha-2
+        codes (two-letter country codes)
+      pattern: ^[A-Z]{2}$
+      example: "US"
+    Email:
+      type: string
+      description: Email address. Pattern is the regex uses all the characters permitted by RFC 5322
+      pattern: ^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$
+      example: "john.galt@flocktory.com"
+  requestBodies:
+    CountryDataRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CountryData"
+      description: CountryData for creation and updation of Country
+      required: true
+  responses:
+    400CountryDataValidationError:
+      description: Invalid CountryData supplied
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Some Validation error for CountryData"
+              error:
+                type: string
+                enum:
+                  - INVALID_COUNTRY_NAME
+                  - INVALID_LOCALE
+                  - INVALID_CURRENCY
+                  - INVALID_TIMEZONE
+    500UnknownException:
+      description: Unknown server side exception
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              requestId:
+                description: Uniuqe request identifier
+                type: string
+                example: "6341c870-c23a-11ec-a6d6-0800200c9a66"
+              message:
+                description: Description of the exception
+                type: string
+                example: "Internal Server Exception"
