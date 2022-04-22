@@ -18,15 +18,128 @@ paths:
         - country
       summary: Create country
       operationId: createCountry
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+        400:
+          $ref: "#/components/responses/400CountryDataValidationError"
+        500:
+          $ref: "#/components/responses/500UnknownException"
+      requestBody:
+        $ref: "#/components/requestBodies/CountryDataRequest"
+  /country/{id}:
+    get:
+      tags:
+        - country
+      summary: Find Country by ID
+      description: Returns a single Country
+      operationId: getCountryById
+      parameters:
+        - name: id
+          in: path
+          description: ID of country to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+        400:
+          description: Invalid Country ID supplied
+        404:
+          description: Country not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
+    put:
+      tags:
+        - country
+      summary: Updates data for country
+      operationId: updateCountry
+      parameters:
+        - name: id
+          in: path
+          description: ID of country that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+        400:
+          $ref: "#/components/responses/400CountryDataValidationError"
+        404:
+          description: Country not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
+      requestBody:
+        $ref: "#/components/requestBodies/CountryDataRequest"
+  /country/{id}/settings:
+    put:
+      tags:
+        - country
+      summary: Updates settings for country
+      operationId: updateCountrySettings
+      parameters:
+        - name: id
+          in: path
+          description: ID of country that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+        404:
+          description: Country not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Country"
-        required: true
+              type: object
+              properties:
+                accountingSettings:
+                  $ref: "#/components/schemas/AccountingSettings"
+                priceFormatting:
+                  $ref: "#/components/schemas/PriceFormatting"
+  /countries:
+    get:
+      tags:
+        - country
+      summary: Get all contries
+      description: Returns all Countries
+      operationId: getCountries
       responses:
-        default:
+        200:
           description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: "#/components/schemas/Country"
+        500:
+          $ref: "#/components/responses/500UnknownException"
 components:
   schemas:
     Country:
@@ -35,7 +148,9 @@ components:
         id:
           type: integer
         name:
-          description: "Official country name in English"
+          description: >
+            Official country name in English. Use list of country names from
+            <a href="https://www.iban.com/country-codes">ISO 3166</a>
           type: string
         alternativeName:
           description: "Additional country name for internal usage"
@@ -52,6 +167,36 @@ components:
           $ref: "#/components/schemas/PriceFormatting"
         countryСode:
           $ref: "#/components/schemas/CountryCode"
+    CountryData:
+      type: object
+      required:
+        - name
+        - alternativeName
+        - locale
+        - currency
+        - timezone
+      description: >
+        Updatable part of <a href="#/components/schemas/Country">country</a>.
+        Also used for country creation.
+      properties:
+        name:
+          description: >
+            Official country name in English. Use list of country names from
+            <a href="https://www.iban.com/country-codes">ISO 3166</a>
+          type: string
+          minLength: 4
+          maxLength: 25
+        alternativeName:
+          description: "Additional country name for internal usage"
+          type: string
+          minLength: 2
+          maxLength: 25
+        locale:
+          $ref: "#/components/schemas/Locale"
+        currency:
+          $ref: "#/components/schemas/Currency"
+        timezone:
+          $ref: "#/components/schemas/Timezone"
     AccountingSettings:
       type: object
       properties:
@@ -74,7 +219,7 @@ components:
         accountantEmails:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/Email'
+            $ref: "#/components/schemas/Email"
         shouldSendPaid:
           type: boolean
         shouldNotifyAccountants:
@@ -127,6 +272,7 @@ components:
         Official currency of the country.
         As value Use 3 letter code in UPPER CASE from <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>
       pattern: ^[A-Z]{3}$
+      example: "USD"
     Locale:
       type: string
       description: >
@@ -134,6 +280,7 @@ components:
         region and any special variant preferences that the user wants to see in their user interface.
         For value use 2 letter code from <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1</a>
       pattern: ^[a-z]{2}$
+      example: "en"
     Timezone:
       type: string
       description: >
@@ -142,6 +289,7 @@ components:
         For this object use value from column "TZ database name"
         from <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">database of time zones</a>
         with type canonical
+      example: "America/Los_Angeles"
     CountryCode:
       type: string
       description: >
@@ -150,7 +298,47 @@ components:
         <a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes">ISO 3166-1</a> alpha-2
         codes (two-letter country codes)
       pattern: ^[A-Z]{2}$
+      example: "US"
     Email:
       type: string
       description: Email address. Pattern is the regex uses all the characters permitted by RFC 5322
       pattern: ^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$
+      example: "john.galt@flocktory.com"
+  requestBodies:
+    CountryDataRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CountryData"
+      description: CountryData for creation and updation of Country
+      required: true
+  responses:
+    400CountryDataValidationError:
+      description: Invalid CountryData supplied
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              error:
+                type: string
+                enum:
+                  - INVALID_COUNTRY_NAME
+                  - INVALID_LOCALE
+                  - INVALID_CURRENCY
+                  - INVALID_TIMEZONE
+    500UnknownException:
+      description: Unknown server side exception
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              requestId:
+                description: Uniuqe request identifier
+                type: string
+              message:
+                description: Description of the exception
+                type: string
