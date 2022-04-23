@@ -28,6 +28,7 @@ OpenJDK 64-Bit Server VM (build 13.0.1+9, mixed mode, sharing)
 ### Documentation
 * [Swagger](https://swagger.io/)
 * [OpenAPI Specification](https://swagger.io/specification/)
+* [swaggerhub-cli](https://github.com/SmartBear/swaggerhub-cli)
 * [Gradle](https://docs.gradle.org/current/userguide/userguide.html)
 * [Openapi Gradle Generator ](https://openapi-generator.tech/docs/plugins/)
 * [Openapi Gradle Generator Spring](https://openapi-generator.tech/docs/generators/spring/)

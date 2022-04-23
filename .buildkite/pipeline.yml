@@ -4,6 +4,7 @@ env:
 
 steps:
   - label: VerifySpecification
+    skip: true
     commands:
       - ./gradlew verifySpecification
     plugins:
@@ -76,6 +77,23 @@ steps:
             - BUILDKITE_JOB_ID
             - BUILDKITE_BUILD_ID
             - BUILDKITE_AGENT_ACCESS_TOKEN
+  - label: PublishApiToSwaggerHub
+#      if: build.tag != null
+      commands:
+#        - export API_VERSION=$BUILDKITE_TAG
+        - swaggerhub api:create flocktory/hq-api/0.0.2 --file=./spec/api-hq.yaml --visibility=public --published=publish --setdefault
+      plugins:
+        - seek-oss/aws-sm#v2.3.1:
+            region: eu-west-1
+            json-to-env:
+              - secret-id: "/prod/services/swaggerhub"
+        - docker-compose#v3.9.0:
+            run: swaggerhub
+            config: docker-compose.ci.yml
+            env:
+#              - BUILDKITE_TAG
+              - SWAGGERHUB_URL
+              - SWAGGERHUB_API_KEY
   - wait
   - label: PublishJavaScriptCLient
     if: build.tag != null
