@@ -78,7 +78,7 @@ steps:
             - BUILDKITE_BUILD_ID
             - BUILDKITE_AGENT_ACCESS_TOKEN
   - label: PublishApiToSwaggerHub
-    if: build.tag != null
+#    if: build.tag != null
     commands:
 #        - export API_VERSION=$BUILDKITE_TAG
       - swaggerhub api:create flocktory/hq-api/0.0.2 --file=./spec/api-hq.yaml --visibility=public --published=publish --setdefault
