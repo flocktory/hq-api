@@ -3,17 +3,16 @@ env:
   NPM_REGISTRY: nexus3.flocktory.com/repository/npm-hosted/
 
 steps:
-  - label: VerifySpecification
-    skip: true
-    commands:
-      - ./gradlew verifySpecification
-    plugins:
-      - docker-compose#v3.9.0:
-          run: openjdk
-          config: docker-compose.ci.yml
-          env:
-            - MAVEN_REGISTRY
-  - wait
+#  - label: VerifySpecification
+#    commands:
+#      - ./gradlew verifySpecification
+#    plugins:
+#      - docker-compose#v3.9.0:
+#          run: openjdk
+#          config: docker-compose.ci.yml
+#          env:
+#            - MAVEN_REGISTRY
+#  - wait
   - label: PublishServerStub
     if: build.tag != null
     commands:
