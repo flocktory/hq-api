@@ -79,7 +79,7 @@ steps:
   - label: PublishApiToSwaggerHub
     if: build.tag != null
     commands:
-      - swaggerhub api:update flocktory/hq-api/$BUILDKITE_TAG --file=./spec/api-hq.yaml --visibility=public --published=publish --setdefault
+      - swaggerhub api:create flocktory/hq-api/$BUILDKITE_TAG --file=./spec/api-hq.yaml --visibility=public --published=publish --setdefault
     plugins:
       - seek-oss/aws-sm#v2.3.1:
           region: eu-west-1
