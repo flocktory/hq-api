@@ -1,7 +1,7 @@
 # HQ-API
 [![Build status](https://badge.buildkite.com/0fe799557524156ea9af30ae2c94161708c93fc9ee7f714b89.svg)](https://buildkite.com/flock-build/hq-api)
-[![GitHub release](https://img.shields.io/github/v/release/flocktory/hq-api?include_prereleases)](https://github.com/flocktory/hq-api/releases)
-[![swaggerhub](https://img.shields.io/badge/spec-swaggerhub-green)](https://app.swaggerhub.com/apis/flocktory/hq-api)
+[![release](https://img.shields.io/badge/api-releases-blue)](https://github.com/flocktory/hq-api/releases)
+[![swaggerhub](https://img.shields.io/badge/spec-swaggerhub-brightgreen)](https://app.swaggerhub.com/apis/flocktory/hq-api)
 [![service](https://img.shields.io/badge/service-hq--svc-blue)](https://github.com/flocktory/hq-svc)
 [![maven](https://img.shields.io/badge/maven-hq--client-blue)](https://nexus.flocktory.com/nexus/content/groups/public/com/flocktory/api/hq.client/)
 [![npm](https://img.shields.io/badge/npm-hq--api-blue)](https://nexus3.flocktory.com/repository/npm-hosted/@flocktory/hq-api)
