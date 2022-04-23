@@ -8,3 +8,7 @@ services:
     build:
       context: .
       dockerfile: node.Dockerfile
+  swaggerhub:
+    build:
+      context: .
+      dockerfile: swaggerhub.Dockerfile

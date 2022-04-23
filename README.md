@@ -1,9 +1,10 @@
 # HQ-API
 [![Build status](https://badge.buildkite.com/0fe799557524156ea9af30ae2c94161708c93fc9ee7f714b89.svg)](https://buildkite.com/flock-build/hq-api)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/flocktory/hq-api?include_prereleases)
+[![swaggerhub](https://img.shields.io/badge/spec-swaggerhub-green)](https://app.swaggerhub.com/apis/flocktory/hq-api)
 [![service](https://img.shields.io/badge/service-hq--svc-blue)](https://github.com/flocktory/hq-svc)
-[![npm](https://img.shields.io/badge/npm-hq--client-blue)](https://nexus3.flocktory.com/service/rest/repository/browse/npm-hosted/%40flocktory/hq-api/)
 [![maven](https://img.shields.io/badge/maven-hq--client-blue)](https://nexus.flocktory.com/nexus/content/groups/public/com/flocktory/api/hq.client/)
+[![npm](https://img.shields.io/badge/npm-hq--api-blue)](https://nexus3.flocktory.com/repository/npm-hosted/@flocktory/hq-api)
 
 HQ OpenAPI Specification and Client &amp; Server SDK Generators
 
@@ -28,6 +29,7 @@ OpenJDK 64-Bit Server VM (build 13.0.1+9, mixed mode, sharing)
 ### Documentation
 * [Swagger](https://swagger.io/)
 * [OpenAPI Specification](https://swagger.io/specification/)
+* [swaggerhub-cli](https://github.com/SmartBear/swaggerhub-cli)
 * [Gradle](https://docs.gradle.org/current/userguide/userguide.html)
 * [Openapi Gradle Generator ](https://openapi-generator.tech/docs/plugins/)
 * [Openapi Gradle Generator Spring](https://openapi-generator.tech/docs/generators/spring/)
