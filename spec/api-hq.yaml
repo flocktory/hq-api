@@ -11,8 +11,27 @@ servers:
 tags:
   - name: country
     description: Operations about country
+  - name: bad-email
+    description: Operation with bad emails
 paths:
   /country:
+    get:
+      tags:
+        - country
+      summary: Get all contries
+      description: Returns all Countries
+      operationId: getCountries
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: "#/components/schemas/Country"
+        500:
+          $ref: "#/components/responses/500UnknownException"
     post:
       tags:
         - country
@@ -122,13 +141,13 @@ paths:
                   $ref: "#/components/schemas/AccountingSettings"
                 priceFormatting:
                   $ref: "#/components/schemas/PriceFormatting"
-  /countries:
+  /bad-email:
     get:
       tags:
-        - country
-      summary: Get all contries
-      description: Returns all Countries
-      operationId: getCountries
+        - bad-email
+      summary: Get all bad emails
+      description: Returns all bad emails patterns
+      operationId: getBadEmails
       responses:
         200:
           description: successful operation
@@ -137,7 +156,56 @@ paths:
               schema:
                 type: object
                 additionalProperties:
-                  $ref: "#/components/schemas/Country"
+                  $ref: "#/components/schemas/BadEmail"
+        500:
+          $ref: "#/components/responses/500UnknownException"
+    post:
+      tags:
+        - bad-email
+      summary: Add bad email
+      operationId: addBadEmail
+      description: Creates new pattern for bad email
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadEmail"
+        500:
+          $ref: "#/components/responses/500UnknownException"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - regexp
+              properties:
+                regexp:
+                  type: string
+                  description: "Regular expression of bad email"
+                  example: ".*@gmali.com"
+  /bad-email/{id}:
+    delete:
+      tags:
+        - bad-email
+      summary: Delete Bad Email
+      description: Delete Bad Email by specified ID
+      operationId: deleteBadEmail
+      parameters:
+        - name: id
+          in: path
+          description: ID of Bad Email to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: Bad email with supplied ID not found
         500:
           $ref: "#/components/responses/500UnknownException"
 components:
@@ -270,6 +338,19 @@ components:
           description: Float precision in invoices for percent
           minimum: 0
           maximum: 4
+    BadEmail:
+      type: object
+      description: "Regexp pattern for determining bad emails"
+      properties:
+        id:
+          type: integer
+        regexp:
+          description: >
+            Regular expression to identify bad email
+          example: ".*@gmali.com"
+          type: string
+        createdAt:
+          $ref: "#/components/schemas/Timestamp"
     Currency:
       type: string
       description: >
@@ -308,6 +389,13 @@ components:
       description: Email address. Pattern is the regex uses all the characters permitted by RFC 5322
       pattern: ^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$
       example: "john.galt@flocktory.com"
+    Timestamp:
+      type: integer
+      format: int64
+      example: 1650815002
+      description: >
+        <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a> is a system for describing a point in time.
+        It is the number of seconds that have elapsed since the Unix epoch.
   requestBodies:
     CountryDataRequest:
       content:
