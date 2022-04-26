@@ -211,6 +211,36 @@ paths:
       summary: Get accounts
       description: Returns subset of accounts
       operationId: getAcconts
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: The number of Accounts to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          required: false
+          description: The number of Accounts to return.
+        - in: query
+          name: byId
+          schema:
+            $ref: "#/components/schemas/AccountFilterById"
+          required: false
+          description: Add to request filtration of result subset by Account Id.
+        - in: query
+          name: byRole
+          schema:
+            $ref: "#/components/schemas/AccountFilterByRole"
+          required: false
+          description: Add to request filtration of result subset by Role.
       responses:
         200:
           description: successful operation
@@ -526,6 +556,16 @@ components:
           $ref: "#/components/schemas/AccountId"
         adtechSalesTeamLead:
           $ref: "#/components/schemas/AccountId"
+    AccountFilterById:
+      type: object
+      description: "Filter for account to show accounts with passed AccountId only"
+      additionalProperties:
+        $ref: "#/components/schemas/AccountId"
+    AccountFilterByRole:
+      type: object
+      description: "Filter for account to show accounts with passed Role only"
+      additionalProperties:
+        $ref: "#/components/schemas/Role"
     Role:
       type: string
       description: "Variants of Account roles"
