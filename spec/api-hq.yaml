@@ -210,11 +210,15 @@ paths:
           $ref: "#/components/responses/500UnknownException"
 components:
   schemas:
+    CountryId:
+      type: integer
+      format: int64
+      description: "Unique identifier of country created in our system"
     Country:
       type: object
       properties:
         id:
-          type: integer
+          $ref: "#/components/schemas/CountryId"
         name:
           description: >
             Official country name in English. Use list of country names from
@@ -351,6 +355,72 @@ components:
           type: string
         createdAt:
           $ref: "#/components/schemas/Timestamp"
+    AccountId:
+      type: integer
+      format: int64
+      description: "Unique identifier of account"
+    Account:
+      type: object
+      description: >
+        Main entity for authentication and authorization in our systems.
+        Represents clients accounts and employees accounts.
+      properties:
+        id:
+          $ref: "#/components/schemas/AccountId"
+        email:
+          $ref: "#/components/schemas/Email"
+        firstName:
+          type: string
+          description: "Account User First Name, used for employees accounts"
+          example: "John"
+        lastName:
+          type: string
+          description: "Account User Last Name, used for employees accounts"
+          example: "Galt"
+        countryId:
+          $ref: "#/components/schemas/CountryId"
+        isActive:
+          description: "Represents status of account, true is active, false is disabled"
+          type: boolean
+        isHasSubscription:
+          description: "Represents email subscription status, true is subscribed, false is unsubscribed"
+          type: boolean
+        role:
+          $ref: "#/components/schemas/Role"
+        registrationDate:
+          $ref: "#/components/schemas/Timestamp"
+        accountManager:
+          $ref: "#/components/schemas/AccountId"
+        accountTeamLead:
+          $ref: "#/components/schemas/AccountId"
+        juniorManager:
+          $ref: "#/components/schemas/AccountId"
+        salesManager:
+          $ref: "#/components/schemas/AccountId"
+        salesTeamLead:
+          $ref: "#/components/schemas/AccountId"
+        adtechAccountManager:
+          $ref: "#/components/schemas/AccountId"
+        adtechAccountTeamLead:
+          $ref: "#/components/schemas/AccountId"
+        adtechSalesManager:
+          $ref: "#/components/schemas/AccountId"
+        adtechSalesTeamLead:
+          $ref: "#/components/schemas/AccountId"
+    Role:
+      type: string
+      description: "Variants of Account roles"
+      enum:
+        - user
+        - sales
+        - account_manager
+        - billing
+        - developer
+        - account_manager_spde
+        - user_view_only
+        - flocker
+        - admin
+        - wc_junior
     Currency:
       type: string
       description: >
