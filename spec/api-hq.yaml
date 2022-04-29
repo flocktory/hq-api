@@ -13,6 +13,8 @@ tags:
     description: Operations about country
   - name: bad-email
     description: Operation with bad emails
+  - name: account
+    description: Operation with account
 paths:
   /country:
     get:
@@ -63,8 +65,7 @@ paths:
           description: ID of country to return
           required: true
           schema:
-            type: integer
-            format: int64
+            $ref: "#/components/schemas/CountryId"
       responses:
         200:
           description: successful operation
@@ -72,8 +73,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Country"
-        400:
-          description: Invalid Country ID supplied
         404:
           description: Country not found
         500:
@@ -89,8 +88,7 @@ paths:
           description: ID of country that needs to be updated
           required: true
           schema:
-            type: integer
-            format: int64
+            $ref: "#/components/schemas/CountryId"
       responses:
         200:
           description: successful operation
@@ -118,8 +116,7 @@ paths:
           description: ID of country that needs to be updated
           required: true
           schema:
-            type: integer
-            format: int64
+            $ref: "#/components/schemas/CountryId"
       responses:
         200:
           description: successful operation
@@ -199,8 +196,7 @@ paths:
           description: ID of Bad Email to delete
           required: true
           schema:
-            type: integer
-            format: int64
+            $ref: "#/components/schemas/BadEmailId"
       responses:
         200:
           description: successful operation
@@ -208,35 +204,189 @@ paths:
           description: Bad email with supplied ID not found
         500:
           $ref: "#/components/responses/500UnknownException"
+  /account:
+    get:
+      tags:
+        - account
+      summary: Get accounts
+      description: Returns subset of accounts
+      operationId: getAcconts
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: The number of Accounts to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          required: false
+          description: The number of Accounts to return.
+        - in: query
+          name: byId
+          schema:
+            type: object
+            description: "Filter for account to show accounts with passed AccountId only"
+            additionalProperties:
+              $ref: "#/components/schemas/AccountId"
+          required: false
+          description: "Add to request filtration of result subset by Account Id."
+        - in: query
+          name: byRole
+          schema:
+            type: object
+            description: "Filter for account to show accounts with passed Role only"
+            additionalProperties:
+              $ref: "#/components/schemas/Role"
+          required: false
+          description: "Add to request filtration of result subset by Role."
+        - in: query
+          name: search
+          schema:
+            type: string
+            description: "Search in Account parameters passed search string"
+          required: false
+          description: "Add to request filtration of result subset by search string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: "#/components/schemas/Account"
+        500:
+          $ref: "#/components/responses/500UnknownException"
+    post:
+      tags:
+        - account
+      summary: Create Account
+      operationId: createAccount
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        400:
+          $ref: "#/components/responses/400AccountCreationValidationError"
+        500:
+          $ref: "#/components/responses/500UnknownException"
+      requestBody:
+        $ref: "#/components/requestBodies/AccountCreateRequest"
+  /account/{id}:
+    get:
+      tags:
+        - account
+      summary: Find Account by ID
+      description: Returns a single Account
+      operationId: getAccountById
+      parameters:
+        - name: id
+          in: path
+          description: ID of account to return
+          required: true
+          schema:
+            $ref: "#/components/schemas/AccountId"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        404:
+          description: Account not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
+    put:
+      tags:
+        - account
+      summary: Updates data for Account
+      operationId: updateAccount
+      parameters:
+        - name: id
+          in: path
+          description: ID of Account that needs to be updated
+          required: true
+          schema:
+            $ref: "#/components/schemas/AccountId"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        400:
+          $ref: "#/components/responses/400AccountDataValidationError"
+        404:
+          description: Account not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
+      requestBody:
+        $ref: "#/components/requestBodies/AccountDataRequest"
+  /account/{id}/switch:
+    put:
+      tags:
+        - account
+      summary: Disable or enable Account
+      operationId: switchAccountStatus
+      parameters:
+        - name: id
+          in: path
+          description: ID of Account that needs to enable or disable
+          required: true
+          schema:
+            $ref: "#/components/schemas/AccountId"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        404:
+          description: Account not found
+        500:
+          $ref: "#/components/responses/500UnknownException"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              description: >
+                Enable or disable account.
+                True - represents enable Account.
+                False - represents disable Account.
 components:
   schemas:
+    CountryId:
+      type: integer
+      format: int64
+      description: "Unique identifier of country created in our system"
     Country:
       type: object
       properties:
         id:
-          type: integer
-        name:
-          description: >
-            Official country name in English. Use list of country names from
-            <a href="https://www.iban.com/country-codes">ISO 3166</a>
-          type: string
-          example: "United States of America (the)"
-        alternativeName:
-          description: "Additional country name for internal usage"
-          type: string
-          example: "United States of America"
-        locale:
-          $ref: "#/components/schemas/Locale"
-        currency:
-          $ref: "#/components/schemas/Currency"
-        timezone:
-          $ref: "#/components/schemas/Timezone"
+          $ref: "#/components/schemas/CountryId"
+        data:
+          $ref: "#/components/schemas/CountryData"
+        code:
+          $ref: "#/components/schemas/CountryCode"
         accountingSettings:
           $ref: "#/components/schemas/AccountingSettings"
         priceFormatting:
           $ref: "#/components/schemas/PriceFormatting"
-        countryСode:
-          $ref: "#/components/schemas/CountryCode"
     CountryData:
       type: object
       required:
@@ -338,12 +488,16 @@ components:
           description: Float precision in invoices for percent
           minimum: 0
           maximum: 4
+    BadEmailId:
+      type: integer
+      format: int64
+      description: "Unique identifier of Bad Email"
     BadEmail:
       type: object
       description: "Regexp pattern for determining bad emails"
       properties:
         id:
-          type: integer
+          $ref: "#/components/schemas/BadEmailId"
         regexp:
           description: >
             Regular expression to identify bad email
@@ -351,6 +505,84 @@ components:
           type: string
         createdAt:
           $ref: "#/components/schemas/Timestamp"
+    AccountId:
+      type: integer
+      format: int64
+      description: "Unique identifier of account"
+    Account:
+      type: object
+      description: >
+        Main entity for authentication and authorization in our systems.
+        Represents clients accounts and employees accounts.
+      properties:
+        id:
+          $ref: "#/components/schemas/AccountId"
+        email:
+          $ref: "#/components/schemas/Email"
+        data:
+          $ref: "#/components/schemas/AccountData"
+        isActive:
+          description: "Represents status of account, true is active, false is disabled"
+          type: boolean
+        registrationDate:
+          $ref: "#/components/schemas/Timestamp"
+    AccountData:
+      type: object
+      description: >
+        Updatable data of Account
+      required:
+        - email
+        - countryId
+        - isHasSubscription
+        - role
+      properties:
+        firstName:
+          type: string
+          description: "Account User First Name, used for employees accounts"
+          example: "John"
+        lastName:
+          type: string
+          description: "Account User Last Name, used for employees accounts"
+          example: "Galt"
+        countryId:
+          $ref: "#/components/schemas/CountryId"
+        isHasSubscription:
+          description: "Represents email subscription status, true is subscribed, false is unsubscribed"
+          type: boolean
+        role:
+          $ref: "#/components/schemas/Role"
+        accountManager:
+          $ref: "#/components/schemas/AccountId"
+        accountTeamLead:
+          $ref: "#/components/schemas/AccountId"
+        juniorManager:
+          $ref: "#/components/schemas/AccountId"
+        salesManager:
+          $ref: "#/components/schemas/AccountId"
+        salesTeamLead:
+          $ref: "#/components/schemas/AccountId"
+        adtechAccountManager:
+          $ref: "#/components/schemas/AccountId"
+        adtechAccountTeamLead:
+          $ref: "#/components/schemas/AccountId"
+        adtechSalesManager:
+          $ref: "#/components/schemas/AccountId"
+        adtechSalesTeamLead:
+          $ref: "#/components/schemas/AccountId"
+    Role:
+      type: string
+      description: "Variants of Account roles"
+      enum:
+        - user
+        - sales
+        - account_manager
+        - billing
+        - developer
+        - account_manager_spde
+        - user_view_only
+        - flocker
+        - admin
+        - wc_junior
     Currency:
       type: string
       description: >
@@ -404,6 +636,35 @@ components:
             $ref: "#/components/schemas/CountryData"
       description: CountryData for creation and updation of Country
       required: true
+    AccountDataRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AccountData"
+      description: CountryData for creation and updation of Country
+      required: true
+    AccountCreateRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            description: >
+              Data for creation of new Account
+            properties:
+              email:
+                $ref: "#/components/schemas/Email"
+              firstName:
+                type: string
+                description: "Account User First Name, used for employees accounts"
+                example: "John"
+              lastName:
+                type: string
+                description: "Account User Last Name, used for employees accounts"
+                example: "Galt"
+              countryId:
+                $ref: "#/components/schemas/CountryId"
+      description: CountryData for creation and updation of Country
+      required: true
   responses:
     400CountryDataValidationError:
       description: Invalid CountryData supplied
@@ -422,6 +683,47 @@ components:
                   - INVALID_LOCALE
                   - INVALID_CURRENCY
                   - INVALID_TIMEZONE
+    400AccountCreationValidationError:
+      description: Invalid CountryData supplied
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Some Validation error for AccountData"
+              error:
+                type: string
+                enum:
+                  - INVALID_EMAIL
+                  - INVALID_COUNTRY_ID
+    400AccountDataValidationError:
+      description: Invalid CountryData supplied
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Some Validation error for AccountData"
+              error:
+                type: string
+                enum:
+                  - INVALID_EMAIL
+                  - INVALID_COUNTRY_ID
+                  - INVALID_ROLE
+                  - INVALID_SUBSCRIPTION_STATUS
+                  - INVALID_ACCOUNT_MANAGER
+                  - INVALID_ACCOUNT_TEAM_LEAD
+                  - INVALID_JUNIOR_MANAGER
+                  - INVALID_SALES_MANAGER
+                  - INVALID_SALES_TEAM_LEAD
+                  - INVALID_ADTECH_ACCOUNT_MANAGER
+                  - INVALID_ADTECH_ACCOUNT_TEAM_LEAD
+                  - INVALID_ADTECH_SALES_MANAGER
+                  - INVALID_ADTECH_SALES_TEAM_LEAD
     500UnknownException:
       description: Unknown server side exception
       content:
