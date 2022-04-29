@@ -7,18 +7,16 @@ plugins {
     id("com.diffplug.spotless") version "6.4.2"
 }
 
-val type = GenerationType.valueOf(project.properties.getOrDefault("type", "Unknown") as String)
+val type = GenerationType.valueOf(project.properties.getOrDefault("type", "Client") as String)
 
 enum class GenerationType {
     Server,
-    Client,
-    Unknown
+    Client
 }
 
 val artifactName = when (type) {
     GenerationType.Server -> "hq.server"
     GenerationType.Client -> "hq.client"
-    GenerationType.Unknown -> "hq.unknown"
 }
 val groupName = "com.flocktory.api"
 val versionValue = System.getenv("API_VERSION") ?: "0.0.0"
@@ -78,13 +76,9 @@ tasks.register(prepareVersion) {
     delete("$rootDir/spec/temp")
 }
 
-tasks.register(verifySpecification, GenerateTask::class) {
-    group = "openapi tools"
-    inputSpec.set("$rootDir/spec/api-hq.yaml")
-    outputDir.set("$buildDir/generated")
-    generatorName.set("java")
-}
-tasks.getByPath(verifySpecification).dependsOn(prepareVersion)
+tasks.register(verifySpecification, Task::class)
+tasks.getByPath(verifySpecification).dependsOn(generateJavaClient)
+tasks.getByPath(verifySpecification).finalizedBy("jar")
 
 tasks.register(generateServerStub, GenerateTask::class) {
     group = "openapi tools"

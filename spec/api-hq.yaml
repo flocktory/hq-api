@@ -569,6 +569,23 @@ components:
           $ref: "#/components/schemas/AccountId"
         adtechSalesTeamLead:
           $ref: "#/components/schemas/AccountId"
+    AccountCreateData:
+      type: object
+      description: >
+        Data for creation of new Account
+      properties:
+        email:
+          $ref: "#/components/schemas/Email"
+        firstName:
+          type: string
+          description: "Account User First Name, used for employees accounts"
+          example: "John"
+        lastName:
+          type: string
+          description: "Account User Last Name, used for employees accounts"
+          example: "Galt"
+        countryId:
+          $ref: "#/components/schemas/CountryId"
     Role:
       type: string
       description: "Variants of Account roles"
@@ -647,23 +664,8 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            description: >
-              Data for creation of new Account
-            properties:
-              email:
-                $ref: "#/components/schemas/Email"
-              firstName:
-                type: string
-                description: "Account User First Name, used for employees accounts"
-                example: "John"
-              lastName:
-                type: string
-                description: "Account User Last Name, used for employees accounts"
-                example: "Galt"
-              countryId:
-                $ref: "#/components/schemas/CountryId"
-      description: CountryData for creation and updation of Country
+            $ref: "#/components/schemas/AccountCreateData"
+      description: Request data for creation of new account
       required: true
   responses:
     400CountryDataValidationError:
