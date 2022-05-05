@@ -372,7 +372,7 @@ components:
   schemas:
     CountryId:
       type: integer
-      format: int64
+      format: int32
       description: "Unique identifier of country created in our system"
     Country:
       type: object
@@ -490,7 +490,7 @@ components:
           maximum: 4
     BadEmailId:
       type: integer
-      format: int64
+      format: int32
       description: "Unique identifier of Bad Email"
     BadEmail:
       type: object
@@ -507,7 +507,7 @@ components:
           $ref: "#/components/schemas/Timestamp"
     AccountId:
       type: integer
-      format: int64
+      format: int32
       description: "Unique identifier of account"
     Account:
       type: object
@@ -640,7 +640,7 @@ components:
       example: "john.galt@flocktory.com"
     Timestamp:
       type: integer
-      format: int64
+      format: int32
       example: 1650815002
       description: >
         <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a> is a system for describing a point in time.
