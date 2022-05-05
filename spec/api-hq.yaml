@@ -132,12 +132,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                accountingSettings:
-                  $ref: "#/components/schemas/AccountingSettings"
-                priceFormatting:
-                  $ref: "#/components/schemas/PriceFormatting"
+              $ref: "#/components/schemas/CountrySettings"
   /bad-email:
     get:
       tags:
@@ -383,10 +378,8 @@ components:
           $ref: "#/components/schemas/CountryData"
         code:
           $ref: "#/components/schemas/CountryCode"
-        accountingSettings:
-          $ref: "#/components/schemas/AccountingSettings"
-        priceFormatting:
-          $ref: "#/components/schemas/PriceFormatting"
+        settings:
+          $ref: "#/components/schemas/CountrySettings"
     CountryData:
       type: object
       required:
@@ -419,39 +412,57 @@ components:
           $ref: "#/components/schemas/Currency"
         timezone:
           $ref: "#/components/schemas/Timezone"
-    AccountingSettings:
+    CountrySettings:
       type: object
       properties:
         extendTermsPeriod:
           type: integer
+          description: >
+            Accounting settings for the Country.
+            Extend terms period.
           minimum: 0
           maximum: 30
         issueDaysShift:
           type: integer
+          description: >
+            Accounting settings for the Country.
+            Issue days shift.
           minimum: 0
           maximum: 30
         defaultDueDaysShift:
           type: integer
+          description: >
+            Accounting settings for the Country.
+            Default due days shift.
           minimum: 0
           maximum: 30
         invoiceEndDateOffset:
           type: integer
+          description: >
+            Accounting settings for the Country.
+            Invoice end date offset.
           minimum: 0
           maximum: 30
         accountantEmails:
           type: object
+          description: >
+            Accounting settings for the Country.
+            Accountant emails.
           additionalProperties:
             $ref: "#/components/schemas/Email"
         shouldSendPaid:
           type: boolean
+          description: >
+            Accounting settings for the Country.
+            Should send paid.
         shouldNotifyAccountants:
+          description: >
+            Accounting settings for the Country.
+            Should notify accountants.
           type: boolean
-    PriceFormatting:
-      type: object
-      description: "Object for storage price formatting settings for country"
-      properties:
         priceFormatCurrency:
           description: >
+            Price formatting settings for country.
             Format for price, use %n - represent numeric value and
             %u - represent currency and add other format symbols.
           example: "%n %u"
@@ -459,6 +470,7 @@ components:
           type: string
         priceFormatPercent:
           description: >
+            Price formatting settings for country.
             Format for discounts, use %n - represent numeric value and
             %u - represent percent sign and add other format symbols.
           example: "%n%u"
@@ -466,6 +478,7 @@ components:
           type: string
         invoiceFormatCurrency:
           description: >
+            Price formatting settings for country.
             Format for prices in invoices, use %n - represent numeric value and
             %u - represent currency and add other format symbols.
           example: "%n"
@@ -473,6 +486,7 @@ components:
           type: string
         invoiceFormatPercent:
           description: >
+            Price formatting settings for country.
             Format for percent in invoices, use %n - represent numeric value and
             %u - represent percent sign and add other format symbols.
           example: "%n%u"
@@ -480,12 +494,16 @@ components:
           type: string
         invoiceCurrencyPrecision:
           type: integer
-          description:  Float precision in invoices for currency
+          description: >
+            Price formatting settings for country.
+            Float precision in invoices for currency
           minimum: 0
           maximum: 4
         invoicePercentPrecision:
           type: integer
-          description: Float precision in invoices for percent
+          description: >
+            Price formatting settings for country.
+            Float precision in invoices for percent
           minimum: 0
           maximum: 4
     BadEmailId:
