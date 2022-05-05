@@ -645,6 +645,64 @@ components:
       description: >
         <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a> is a system for describing a point in time.
         It is the number of seconds that have elapsed since the Unix epoch.
+    CountryDataValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Some Validation error for CountryData"
+        error:
+          type: string
+          enum:
+            - INVALID_COUNTRY_NAME
+            - INVALID_LOCALE
+            - INVALID_CURRENCY
+            - INVALID_TIMEZONE
+    AccountCreationValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Some Validation error for AccountData"
+        error:
+          type: string
+          enum:
+            - INVALID_EMAIL
+            - INVALID_COUNTRY_ID
+    AccountDataValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Some Validation error for AccountData"
+        error:
+          type: string
+          enum:
+            - INVALID_EMAIL
+            - INVALID_COUNTRY_ID
+            - INVALID_ROLE
+            - INVALID_SUBSCRIPTION_STATUS
+            - INVALID_ACCOUNT_MANAGER
+            - INVALID_ACCOUNT_TEAM_LEAD
+            - INVALID_JUNIOR_MANAGER
+            - INVALID_SALES_MANAGER
+            - INVALID_SALES_TEAM_LEAD
+            - INVALID_ADTECH_ACCOUNT_MANAGER
+            - INVALID_ADTECH_ACCOUNT_TEAM_LEAD
+            - INVALID_ADTECH_SALES_MANAGER
+            - INVALID_ADTECH_SALES_TEAM_LEAD
+    InternalServerError:
+      type: object
+      description: Entity to store some unknown internal server error
+      properties:
+        requestId:
+          description: Uniuqe request identifier
+          type: string
+          example: "6341c870-c23a-11ec-a6d6-0800200c9a66"
+        message:
+          description: Description of the exception
+          type: string
+          example: "Internal Server Exception"
   requestBodies:
     CountryDataRequest:
       content:
@@ -673,71 +731,22 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "Some Validation error for CountryData"
-              error:
-                type: string
-                enum:
-                  - INVALID_COUNTRY_NAME
-                  - INVALID_LOCALE
-                  - INVALID_CURRENCY
-                  - INVALID_TIMEZONE
+            $ref: "#/components/schemas/CountryDataValidationError"
     400AccountCreationValidationError:
       description: Invalid CountryData supplied
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "Some Validation error for AccountData"
-              error:
-                type: string
-                enum:
-                  - INVALID_EMAIL
-                  - INVALID_COUNTRY_ID
+            $ref: "#/components/responses/400AccountCreationValidationError"
     400AccountDataValidationError:
       description: Invalid CountryData supplied
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: "Some Validation error for AccountData"
-              error:
-                type: string
-                enum:
-                  - INVALID_EMAIL
-                  - INVALID_COUNTRY_ID
-                  - INVALID_ROLE
-                  - INVALID_SUBSCRIPTION_STATUS
-                  - INVALID_ACCOUNT_MANAGER
-                  - INVALID_ACCOUNT_TEAM_LEAD
-                  - INVALID_JUNIOR_MANAGER
-                  - INVALID_SALES_MANAGER
-                  - INVALID_SALES_TEAM_LEAD
-                  - INVALID_ADTECH_ACCOUNT_MANAGER
-                  - INVALID_ADTECH_ACCOUNT_TEAM_LEAD
-                  - INVALID_ADTECH_SALES_MANAGER
-                  - INVALID_ADTECH_SALES_TEAM_LEAD
+            $ref: "#/components/schemas/AccountDataValidationError"
     500UnknownException:
       description: Unknown server side exception
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              requestId:
-                description: Uniuqe request identifier
-                type: string
-                example: "6341c870-c23a-11ec-a6d6-0800200c9a66"
-              message:
-                description: Description of the exception
-                type: string
-                example: "Internal Server Exception"
+            $ref: "#/components/schemas/InternalServerError"
