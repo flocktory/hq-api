@@ -737,7 +737,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/responses/400AccountCreationValidationError"
+            $ref: "#/components/schemas/AccountCreationValidationError"
     400AccountDataValidationError:
       description: Invalid CountryData supplied
       content:
