@@ -8,8 +8,8 @@
 
 HQ OpenAPI Specification and Client &amp; Server SDK Generators
 
-### Cloning Github Repository
-* [Get access to Flocktory team in Github](https://github.com/flocktory)
+### Cloning GitHub Repository
+* [Get access to Flocktory team in GitHub](https://github.com/flocktory)
 * [Adding a new SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 * Clone Repository
 ```

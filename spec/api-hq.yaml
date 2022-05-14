@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.0
 info:
-  title: HQ API Spesification
+  title: HQ API Specification
   version: API_VERSION
 externalDocs:
   description: OpenAPI Specification
@@ -20,7 +20,7 @@ paths:
     get:
       tags:
         - country
-      summary: Get all contries
+      summary: Get all countries
       description: Returns all Countries
       operationId: getCountries
       responses:
@@ -205,7 +205,7 @@ paths:
         - account
       summary: Get accounts
       description: Returns subset of accounts
-      operationId: getAcconts
+      operationId: getAccounts
       parameters:
         - in: query
           name: offset
@@ -714,7 +714,7 @@ components:
       description: Entity to store some unknown internal server error
       properties:
         requestId:
-          description: Uniuqe request identifier
+          description: Unique request identifier
           type: string
           example: "6341c870-c23a-11ec-a6d6-0800200c9a66"
         message:
@@ -727,14 +727,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/CountryData"
-      description: CountryData for creation and updation of Country
+      description: CountryData for creation and update of Country
       required: true
     AccountDataRequest:
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/AccountData"
-      description: CountryData for creation and updation of Country
+      description: CountryData for creation and update of Country
       required: true
     AccountCreateRequest:
       content:

@@ -51,7 +51,7 @@ steps:
             - MAVEN_REGISTRY
             - NEXUS_USERNAME
             - NEXUS_PASSWORD
-  - label: GenerateJavaScriptCLient
+  - label: GenerateJavaScriptClient
     if: build.tag != null
     commands:
       - export API_VERSION=$BUILDKITE_TAG
@@ -77,7 +77,7 @@ steps:
             - BUILDKITE_BUILD_ID
             - BUILDKITE_AGENT_ACCESS_TOKEN
   - wait
-  - label: PublishJavaScriptCLient
+  - label: PublishJavaScriptClient
     if: build.tag != null
     commands:
       - buildkite-agent artifact download hq-api-js-client.tar .
