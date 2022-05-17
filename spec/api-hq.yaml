@@ -374,16 +374,20 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/CountryId"
+        name:
+          description: >
+            Official country name in English. List of country names from
+            <a href="https://www.iban.com/country-codes">ISO 3166</a>
+          type: string
+          example: "United States of America (the)"
         data:
           $ref: "#/components/schemas/CountryData"
-        code:
-          $ref: "#/components/schemas/CountryCode"
         settings:
           $ref: "#/components/schemas/CountrySettings"
     CountryData:
       type: object
       required:
-        - name
+        - code
         - alternativeName
         - locale
         - currency
@@ -392,14 +396,8 @@ components:
         Updatable part of <a href="#/components/schemas/Country">country</a>.
         Also used for country creation.
       properties:
-        name:
-          description: >
-            Official country name in English. Use list of country names from
-            <a href="https://www.iban.com/country-codes">ISO 3166</a>
-          type: string
-          example: "United States of America (the)"
-          minLength: 4
-          maxLength: 25
+        code:
+          $ref: "#/components/schemas/CountryCode"
         alternativeName:
           description: "Additional country name for internal usage"
           type: string
@@ -672,7 +670,7 @@ components:
         error:
           type: string
           enum:
-            - INVALID_COUNTRY_NAME
+            - INVALID_COUNTRY_CODE
             - INVALID_LOCALE
             - INVALID_CURRENCY
             - INVALID_TIMEZONE
