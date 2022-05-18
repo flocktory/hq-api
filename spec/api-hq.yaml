@@ -415,6 +415,7 @@ components:
       properties:
         extendTermsPeriod:
           type: integer
+          format: int32
           description: >
             Accounting settings for the Country.
             Extend terms period.
@@ -422,6 +423,7 @@ components:
           maximum: 30
         issueDaysShift:
           type: integer
+          format: int32
           description: >
             Accounting settings for the Country.
             Issue days shift.
@@ -429,6 +431,7 @@ components:
           maximum: 30
         defaultDueDaysShift:
           type: integer
+          format: int32
           description: >
             Accounting settings for the Country.
             Default due days shift.
@@ -436,6 +439,7 @@ components:
           maximum: 30
         invoiceEndDateOffset:
           type: integer
+          format: int32
           description: >
             Accounting settings for the Country.
             Invoice end date offset.
@@ -492,6 +496,7 @@ components:
           type: string
         invoiceCurrencyPrecision:
           type: integer
+          format: int32
           description: >
             Price formatting settings for country.
             Float precision in invoices for currency
@@ -499,6 +504,7 @@ components:
           maximum: 4
         invoicePercentPrecision:
           type: integer
+          format: int32
           description: >
             Price formatting settings for country.
             Float precision in invoices for percent
