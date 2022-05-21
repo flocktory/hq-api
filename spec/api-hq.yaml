@@ -464,7 +464,7 @@ components:
             Format for price, use %n - represent numeric value and
             %u - represent currency and add other format symbols.
           example: "%n %u"
-          format: ^\%n.*\%u$
+          pattern: ^\%n.*\%u$
           type: string
         priceFormatPercent:
           description: >
@@ -472,7 +472,7 @@ components:
             Format for discounts, use %n - represent numeric value and
             %u - represent percent sign and add other format symbols.
           example: "%n%u"
-          format: ^\%n.*\%u$
+          pattern: ^\%n.*\%u$
           type: string
         invoiceFormatCurrency:
           description: >
@@ -480,7 +480,7 @@ components:
             Format for prices in invoices, use %n - represent numeric value and
             %u - represent currency and add other format symbols.
           example: "%n"
-          format: ^(\%n.*\%u)|(\%n)$
+          pattern: ^(\%n.*\%u)|(\%n)$
           type: string
         invoiceFormatPercent:
           description: >
@@ -488,7 +488,7 @@ components:
             Format for percent in invoices, use %n - represent numeric value and
             %u - represent percent sign and add other format symbols.
           example: "%n%u"
-          format: ^\%n.*\%u$
+          pattern: ^\%n.*\%u$
           type: string
         invoiceCurrencyPrecision:
           type: integer
