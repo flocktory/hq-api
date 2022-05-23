@@ -549,7 +549,7 @@ components:
       description: >
         Updatable data of Account
       required:
-        - email
+        - firstName
         - countryId
         - isHasSubscription
         - role
