@@ -24,6 +24,8 @@ val verifySpecification = "verifySpecification"
 val generateJavaClient = "generateJavaClient"
 val generateJavaScriptClient = "generateJavaScriptClient"
 val archiveJavaScriptClient = "archiveJavaScriptClient"
+val generateTypeScriptClient = "generateTypeScriptClient"
+val archiveTypeScriptClient = "archiveTypeScriptClient"
 val generateServerStub = "generateServerStub"
 val spotlessJavaApply = "spotlessJavaApply"
 val prepareVersion = "prepareVersion"
@@ -165,6 +167,30 @@ tasks.register(archiveJavaScriptClient, Tar::class) {
     include("*", "*/*", "*/*/*", "*/*/*/*")
     compression = Compression.NONE
 }
+
+tasks.register(generateTypeScriptClient, GenerateTask::class) {
+    group = "openapi tools"
+    groupId.set(groupName)
+    generatorName.set("typescript")
+    inputSpec.set("$rootDir/spec/api-hq.yaml")
+    outputDir.set("$buildDir/hq-api-ts-client")
+    configOptions.set(mapOf(
+        "npmName" to "@flocktory/hq-api-ts",
+        "npmRepository" to "https://nexus3.flocktory.com/repository/npm-hosted/",
+        "npmVersion" to versionValue
+    ))
+}
+
+tasks.register(archiveTypeScriptClient, Tar::class) {
+    from("build/hq-api-ts-client")
+    destinationDirectory.set(file(rootDir))
+    archiveFileName.set("hq-api-ts-client.tar.gz")
+    include("**")
+    compression = Compression.NONE
+}
+
+tasks.getByPath(generateTypeScriptClient).dependsOn(prepareVersion)
+tasks.getByPath(generateTypeScriptClient).finalizedBy(archiveTypeScriptClient)
 
 spotless {
     java {
