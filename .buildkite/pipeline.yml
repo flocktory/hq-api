@@ -79,7 +79,7 @@ steps:
   - label: GenerateTypeScriptClient
     if: build.tag != null
     commands:
-      - export API_VERSION=0.0.777
+      - export API_VERSION=$BUILDKITE_TAG
       - ./gradlew generateTypeScriptClient -Ptype=Client
       - buildkite-agent artifact upload hq-api-ts-client.tar.gz
     plugins:
