@@ -3,83 +3,83 @@ env:
   NPM_REGISTRY: nexus3.flocktory.com/repository/npm-hosted/
 
 steps:
-  - label: VerifySpecification
-    commands:
-      - ./gradlew verifySpecification
-    plugins:
-      - docker-compose#v3.9.0:
-          run: openjdk
-          config: docker-compose.ci.yml
-          env:
-            - MAVEN_REGISTRY
-  - wait
-  - label: PublishServerStub
-    if: build.tag != null
-    commands:
-      - export API_VERSION=$BUILDKITE_TAG
-      - ./gradlew generateServerStub -Ptype=Server
-      - ./gradlew publish -Ptype=Server
-    plugins:
-      - seek-oss/aws-sm#v2.3.1:
-          region: eu-west-1
-          json-to-env:
-            - secret-id: "/prod/services/nexus"
-      - docker-compose#v3.9.0:
-          run: openjdk
-          config: docker-compose.ci.yml
-          env:
-            - BUILDKITE_TAG
-            - MAVEN_REGISTRY
-            - NEXUS_USERNAME
-            - NEXUS_PASSWORD
-  - label: PublishJavaClient
-    if: build.tag != null
-    commands:
-      - export API_VERSION=$BUILDKITE_TAG
-      - ./gradlew generateJavaClient -Ptype=Client
-      - ./gradlew publish -Ptype=Client
-    plugins:
-      - seek-oss/aws-sm#v2.3.1:
-          region: eu-west-1
-          json-to-env:
-            - secret-id: "/prod/services/nexus"
-      - docker-compose#v3.9.0:
-          run: openjdk
-          config: docker-compose.ci.yml
-          env:
-            - BUILDKITE_TAG
-            - MAVEN_REGISTRY
-            - NEXUS_USERNAME
-            - NEXUS_PASSWORD
-  - label: GenerateJavaScriptClient
-    if: build.tag != null
-    commands:
-      - export API_VERSION=$BUILDKITE_TAG
-      - ./gradlew generateJavaScriptClient -Ptype=Client
-      - buildkite-agent artifact upload hq-api-js-client.tar
-    plugins:
-      - seek-oss/aws-sm#v2.3.1:
-          region: eu-west-1
-          json-to-env:
-            - secret-id: "/prod/services/nexus"
-            - secret-id: "/prod/services/buildkite"
-      - docker-compose#v3.9.0:
-          run: openjdk
-          config: docker-compose.ci.yml
-          args:
-            - TOKEN=$TOKEN
-          env:
-            - MAVEN_REGISTRY
-            - NEXUS_USERNAME
-            - NEXUS_PASSWORD
-            - BUILDKITE_TAG
-            - BUILDKITE_JOB_ID
-            - BUILDKITE_BUILD_ID
-            - BUILDKITE_AGENT_ACCESS_TOKEN
+#  - label: VerifySpecification
+#    commands:
+#      - ./gradlew verifySpecification
+#    plugins:
+#      - docker-compose#v3.9.0:
+#          run: openjdk
+#          config: docker-compose.ci.yml
+#          env:
+#            - MAVEN_REGISTRY
+#  - wait
+#  - label: PublishServerStub
+#    if: build.tag != null
+#    commands:
+#      - export API_VERSION=$BUILDKITE_TAG
+#      - ./gradlew generateServerStub -Ptype=Server
+#      - ./gradlew publish -Ptype=Server
+#    plugins:
+#      - seek-oss/aws-sm#v2.3.1:
+#          region: eu-west-1
+#          json-to-env:
+#            - secret-id: "/prod/services/nexus"
+#      - docker-compose#v3.9.0:
+#          run: openjdk
+#          config: docker-compose.ci.yml
+#          env:
+#            - BUILDKITE_TAG
+#            - MAVEN_REGISTRY
+#            - NEXUS_USERNAME
+#            - NEXUS_PASSWORD
+#  - label: PublishJavaClient
+#    if: build.tag != null
+#    commands:
+#      - export API_VERSION=$BUILDKITE_TAG
+#      - ./gradlew generateJavaClient -Ptype=Client
+#      - ./gradlew publish -Ptype=Client
+#    plugins:
+#      - seek-oss/aws-sm#v2.3.1:
+#          region: eu-west-1
+#          json-to-env:
+#            - secret-id: "/prod/services/nexus"
+#      - docker-compose#v3.9.0:
+#          run: openjdk
+#          config: docker-compose.ci.yml
+#          env:
+#            - BUILDKITE_TAG
+#            - MAVEN_REGISTRY
+#            - NEXUS_USERNAME
+#            - NEXUS_PASSWORD
+#  - label: GenerateJavaScriptClient
+#    if: build.tag != null
+#    commands:
+#      - export API_VERSION=$BUILDKITE_TAG
+#      - ./gradlew generateJavaScriptClient -Ptype=Client
+#      - buildkite-agent artifact upload hq-api-js-client.tar
+#    plugins:
+#      - seek-oss/aws-sm#v2.3.1:
+#          region: eu-west-1
+#          json-to-env:
+#            - secret-id: "/prod/services/nexus"
+#            - secret-id: "/prod/services/buildkite"
+#      - docker-compose#v3.9.0:
+#          run: openjdk
+#          config: docker-compose.ci.yml
+#          args:
+#            - TOKEN=$TOKEN
+#          env:
+#            - MAVEN_REGISTRY
+#            - NEXUS_USERNAME
+#            - NEXUS_PASSWORD
+#            - BUILDKITE_TAG
+#            - BUILDKITE_JOB_ID
+#            - BUILDKITE_BUILD_ID
+#            - BUILDKITE_AGENT_ACCESS_TOKEN
   - label: GenerateTypeScriptClient
-    if: build.tag != null
+#    if: build.tag != null
     commands:
-      - export API_VERSION=$BUILDKITE_TAG
+      - export API_VERSION=0.0.777
       - ./gradlew generateTypeScriptClient -Ptype=Client
       - buildkite-agent artifact upload hq-api-ts-client.tar.gz
     plugins:
@@ -102,38 +102,39 @@ steps:
             - BUILDKITE_BUILD_ID
             - BUILDKITE_AGENT_ACCESS_TOKEN
   - wait
-  - label: PublishJavaScriptClient
-    if: build.tag != null
-    commands:
-      - buildkite-agent artifact download hq-api-js-client.tar .
-      - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
-      - npm install babel-cli babel-core
-      - echo "//$NPM_REGISTRY:_authToken=NpmToken.$$NPM_TOKEN" > .npmrc
-      - npm publish --registry=https://$NPM_REGISTRY
-    plugins:
-      - seek-oss/aws-sm#v2.3.1:
-          region: eu-west-1
-          json-to-env:
-            - secret-id: "/prod/services/buildkite"
-            - secret-id: "/prod/services/npm"
-      - docker-compose#v3.9.0:
-          run: node
-          config: docker-compose.ci.yml
-          args:
-            - TOKEN=$TOKEN
-          env:
-            - BUILDKITE_TAG
-            - BUILDKITE_JOB_ID
-            - BUILDKITE_BUILD_ID
-            - BUILDKITE_AGENT_ACCESS_TOKEN
-            - NPM_REGISTRY
-            - NPM_TOKEN
+#  - label: PublishJavaScriptClient
+#    if: build.tag != null
+#    commands:
+#      - buildkite-agent artifact download hq-api-js-client.tar .
+#      - tar -xf hq-api-js-client.tar && rm hq-api-js-client.tar
+#      - npm install babel-cli babel-core
+#      - echo "//$NPM_REGISTRY:_authToken=NpmToken.$$NPM_TOKEN" > .npmrc
+#      - npm publish --registry=https://$NPM_REGISTRY
+#    plugins:
+#      - seek-oss/aws-sm#v2.3.1:
+#          region: eu-west-1
+#          json-to-env:
+#            - secret-id: "/prod/services/buildkite"
+#            - secret-id: "/prod/services/npm"
+#      - docker-compose#v3.9.0:
+#          run: node
+#          config: docker-compose.ci.yml
+#          args:
+#            - TOKEN=$TOKEN
+#          env:
+#            - BUILDKITE_TAG
+#            - BUILDKITE_JOB_ID
+#            - BUILDKITE_BUILD_ID
+#            - BUILDKITE_AGENT_ACCESS_TOKEN
+#            - NPM_REGISTRY
+#            - NPM_TOKEN
   - label: PublishTypeScriptClient
-    if: build.tag != null
+#    if: build.tag != null
     commands:
       - buildkite-agent artifact download hq-api-ts-client.tar.gz .
       - tar -xf hq-api-ts-client.tar.gz && rm hq-api-ts-client.tar.gz
       - echo "//$NPM_REGISTRY:_authToken=NpmToken.$$NPM_TOKEN" > .npmrc
+      - npm install typescript
       - npm publish --registry=https://$NPM_REGISTRY
     plugins:
       - seek-oss/aws-sm#v2.3.1:
@@ -153,19 +154,19 @@ steps:
             - BUILDKITE_AGENT_ACCESS_TOKEN
             - NPM_REGISTRY
             - NPM_TOKEN
-  - label: PublishApiToSwaggerHub
-    if: build.tag != null
-    commands:
-      - swaggerhub api:create flocktory/hq-api/$BUILDKITE_TAG --file=./spec/api-hq.yaml --visibility=public --published=publish --setdefault
-    plugins:
-      - seek-oss/aws-sm#v2.3.1:
-          region: eu-west-1
-          json-to-env:
-            - secret-id: "/prod/services/swaggerhub"
-      - docker-compose#v3.9.0:
-          run: swaggerhub
-          config: docker-compose.ci.yml
-          env:
-            - BUILDKITE_TAG
-            - SWAGGERHUB_URL
-            - SWAGGERHUB_API_KEY
+#  - label: PublishApiToSwaggerHub
+#    if: build.tag != null
+#    commands:
+#      - swaggerhub api:create flocktory/hq-api/$BUILDKITE_TAG --file=./spec/api-hq.yaml --visibility=public --published=publish --setdefault
+#    plugins:
+#      - seek-oss/aws-sm#v2.3.1:
+#          region: eu-west-1
+#          json-to-env:
+#            - secret-id: "/prod/services/swaggerhub"
+#      - docker-compose#v3.9.0:
+#          run: swaggerhub
+#          config: docker-compose.ci.yml
+#          env:
+#            - BUILDKITE_TAG
+#            - SWAGGERHUB_URL
+#            - SWAGGERHUB_API_KEY
