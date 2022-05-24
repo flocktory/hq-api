@@ -29,8 +29,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties:
+                type: array
+                items:
                   $ref: "#/components/schemas/Country"
         500:
           $ref: "#/components/responses/500UnknownException"
@@ -146,8 +146,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties:
+                type: array
+                items:
                   $ref: "#/components/schemas/BadEmail"
         500:
           $ref: "#/components/responses/500UnknownException"
@@ -223,18 +223,18 @@ paths:
         - in: query
           name: byId
           schema:
-            type: object
+            type: array
             description: "Filter for account to show accounts with passed AccountId only"
-            additionalProperties:
+            items:
               $ref: "#/components/schemas/AccountId"
           required: false
           description: "Add to request filtration of result subset by Account Id."
         - in: query
           name: byRole
           schema:
-            type: object
+            type: array
             description: "Filter for account to show accounts with passed Role only"
-            additionalProperties:
+            items:
               $ref: "#/components/schemas/Role"
           required: false
           description: "Add to request filtration of result subset by Role."
@@ -251,8 +251,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties:
+                type: array
+                items:
                   $ref: "#/components/schemas/Account"
         500:
           $ref: "#/components/responses/500UnknownException"
@@ -442,11 +442,11 @@ components:
           minimum: 0
           maximum: 30
         accountantEmails:
-          type: object
+          type: array
           description: >
             Accounting settings for the Country.
             Accountant emails.
-          additionalProperties:
+          items:
             $ref: "#/components/schemas/Email"
         shouldSendPaid:
           type: boolean
