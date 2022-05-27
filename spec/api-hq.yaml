@@ -608,16 +608,16 @@ components:
       type: string
       description: "Variants of Account roles"
       enum:
-        - user
-        - sales
-        - account_manager
-        - billing
-        - developer
-        - account_manager_spde
-        - user_view_only
-        - flocker
-        - admin
-        - wc_junior
+        - USER
+        - SALES
+        - ACCOUNT_MANAGER
+        - BILLING
+        - DEVELOPER
+        - ACCOUNT_MANAGER_SPDE
+        - USER_VIEW_ONLY
+        - FLOCKER
+        - ADMIN
+        - WC_JUNIOR
     Currency:
       type: string
       description: >
