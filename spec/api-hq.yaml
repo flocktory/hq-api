@@ -230,7 +230,7 @@ paths:
           required: false
           description: "Add to request filtration of result subset by Account Id."
         - in: query
-          name: byRole
+          name: byRoles
           schema:
             type: array
             description: "Filter for account to show accounts with passed Role only"
