@@ -685,7 +685,6 @@ components:
         error:
           type: string
           enum:
-            - INVALID_EMAIL
             - INVALID_COUNTRY_ID
     AccountDataValidationError:
       type: object
@@ -696,7 +695,6 @@ components:
         error:
           type: string
           enum:
-            - INVALID_EMAIL
             - INVALID_COUNTRY_ID
             - INVALID_ROLE
             - INVALID_SUBSCRIPTION_STATUS
@@ -734,7 +732,7 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/AccountData"
-      description: CountryData for creation and update of Country
+      description: Data for creation and update of Account
       required: true
     AccountCreateRequest:
       content:
@@ -751,13 +749,13 @@ components:
           schema:
             $ref: "#/components/schemas/CountryDataValidationError"
     400AccountCreationValidationError:
-      description: Invalid CountryData supplied
+      description: Invalid AccountCreateData supplied
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/AccountCreationValidationError"
     400AccountDataValidationError:
-      description: Invalid CountryData supplied
+      description: Invalid AccountData supplied
       content:
         application/json:
           schema:
