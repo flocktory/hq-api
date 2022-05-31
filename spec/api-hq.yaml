@@ -653,8 +653,8 @@ components:
       example: "US"
     Email:
       type: string
+      format: email
       description: Email address. Pattern is the regex uses all the characters permitted by RFC 5322
-      pattern: ^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$
       example: "john.galt@flocktory.com"
     Timestamp:
       type: integer
