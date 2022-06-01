@@ -351,11 +351,11 @@ paths:
         500:
           $ref: "#/components/responses/500UnknownException"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: boolean
-              required: true
               description: >
                 Enable or disable account.
                 True - represents enable Account.
