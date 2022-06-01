@@ -355,6 +355,7 @@ paths:
           application/json:
             schema:
               type: boolean
+              required: true
               description: >
                 Enable or disable account.
                 True - represents enable Account.
