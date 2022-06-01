@@ -696,8 +696,6 @@ components:
           type: string
           enum:
             - INVALID_COUNTRY_ID
-            - INVALID_ROLE
-            - INVALID_SUBSCRIPTION_STATUS
             - INVALID_ACCOUNT_MANAGER
             - INVALID_ACCOUNT_TEAM_LEAD
             - INVALID_JUNIOR_MANAGER
