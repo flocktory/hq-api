@@ -15,6 +15,9 @@ tags:
     description: Operation with bad emails
   - name: account
     description: Operation with account
+security:
+  - bearerAuth: []
+  - cookieAuth: []
 paths:
   /country:
     get:
@@ -32,8 +35,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Country"
+        401:
+          description: Authentication or authorization failed
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
     post:
       tags:
         - country
@@ -47,9 +52,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Country"
         400:
-          $ref: "#/components/responses/400CountryDataValidationError"
+          $ref: "#/components/responses/CountryDataValidationError"
+        401:
+          description: Authentication or authorization failed
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
       requestBody:
         $ref: "#/components/requestBodies/CountryDataRequest"
   /country/{id}:
@@ -73,10 +80,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Country"
+        401:
+          description: Authentication or authorization failed
         404:
           description: Country not found
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
     put:
       tags:
         - country
@@ -97,11 +106,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/Country"
         400:
-          $ref: "#/components/responses/400CountryDataValidationError"
+          $ref: "#/components/responses/CountryDataValidationError"
+        401:
+          description: Authentication or authorization failed
         404:
           description: Country not found
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
       requestBody:
         $ref: "#/components/requestBodies/CountryDataRequest"
   /country/{id}/settings:
@@ -124,10 +135,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Country"
+        401:
+          description: Authentication or authorization failed
         404:
           description: Country not found
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
       requestBody:
         content:
           application/json:
@@ -149,8 +162,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/BadEmail"
+        401:
+          description: Authentication or authorization failed
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
     post:
       tags:
         - bad-email
@@ -165,7 +180,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/BadEmail"
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
       requestBody:
         content:
           application/json:
@@ -191,10 +206,12 @@ paths:
       responses:
         200:
           description: successful operation
+        401:
+          description: Authentication or authorization failed
         404:
           description: Bad email with supplied ID not found
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
   /account:
     get:
       tags:
@@ -254,8 +271,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Account"
+        401:
+          description: Authentication or authorization failed
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
     post:
       tags:
         - account
@@ -269,9 +288,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Account"
         400:
-          $ref: "#/components/responses/400AccountCreationValidationError"
+          $ref: "#/components/responses/AccountCreationValidationError"
+        401:
+          description: Authentication or authorization failed
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
       requestBody:
         $ref: "#/components/requestBodies/AccountCreateRequest"
   /account/{id}:
@@ -295,10 +316,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Account"
+        401:
+          description: Authentication or authorization failed
         404:
           description: Account not found
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
     put:
       tags:
         - account
@@ -319,11 +342,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/Account"
         400:
-          $ref: "#/components/responses/400AccountDataValidationError"
+          $ref: "#/components/responses/AccountDataValidationError"
+        401:
+          description: Authentication or authorization failed
         404:
           description: Account not found
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
       requestBody:
         $ref: "#/components/requestBodies/AccountDataRequest"
   /account/{id}/switch:
@@ -346,10 +371,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Account"
+        401:
+          description: Authentication or authorization failed
         404:
           description: Account not found
         500:
-          $ref: "#/components/responses/500UnknownException"
+          $ref: "#/components/responses/UnknownError"
       requestBody:
         required: true
         content:
@@ -718,6 +745,15 @@ components:
           description: Description of the exception
           type: string
           example: "Internal Server Exception"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: __flocktory-auth
   requestBodies:
     CountryDataRequest:
       content:
@@ -741,25 +777,25 @@ components:
       description: Request data for creation of new account
       required: true
   responses:
-    400CountryDataValidationError:
+    CountryDataValidationError:
       description: Invalid CountryData supplied
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/CountryDataValidationError"
-    400AccountCreationValidationError:
+    AccountCreationValidationError:
       description: Invalid AccountCreateData supplied
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/AccountCreationValidationError"
-    400AccountDataValidationError:
+    AccountDataValidationError:
       description: Invalid AccountData supplied
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/AccountDataValidationError"
-    500UnknownException:
+    UnknownError:
       description: Unknown server side exception
       content:
         application/json:
