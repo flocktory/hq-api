@@ -636,16 +636,19 @@ components:
       type: string
       description: "Variants of Account roles"
       enum:
-        - USER
-        - SALES
         - ACCOUNT_MANAGER
-        - BILLING
-        - DEVELOPER
         - ACCOUNT_MANAGER_SPDE
-        - USER_VIEW_ONLY
-        - FLOCKER
+        - ACCOUNT_SALES
         - ADMIN
-        - WC_JUNIOR
+        - BILLING
+        - CONTROLLER
+        - FLOCKER
+        - FLOCKER_READ_ONLY
+        - SALES
+        - USER
+        - USER_READ_ONLY
+        - DEVELOPER # Deprecated Role
+        - WC_JUNIOR # Deprecated Role
     Currency:
       type: string
       description: >
