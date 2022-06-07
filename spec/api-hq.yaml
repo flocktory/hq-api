@@ -675,6 +675,7 @@ components:
         - SALES
         - USER
         - USER_READ_ONLY
+        - USER_VIEW_ONLY # Deprecated Role
         - DEVELOPER # Deprecated Role
         - WC_JUNIOR # Deprecated Role
     Currency:
