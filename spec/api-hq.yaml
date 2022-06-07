@@ -36,7 +36,9 @@ paths:
                 items:
                   $ref: "#/components/schemas/Country"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         500:
           $ref: "#/components/responses/UnknownError"
     post:
@@ -54,7 +56,9 @@ paths:
         400:
           $ref: "#/components/responses/CountryDataValidationError"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         500:
           $ref: "#/components/responses/UnknownError"
       requestBody:
@@ -81,7 +85,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Country"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         404:
           description: Country not found
         500:
@@ -108,7 +114,9 @@ paths:
         400:
           $ref: "#/components/responses/CountryDataValidationError"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         404:
           description: Country not found
         500:
@@ -136,7 +144,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Country"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         404:
           description: Country not found
         500:
@@ -163,7 +173,9 @@ paths:
                 items:
                   $ref: "#/components/schemas/BadEmail"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         500:
           $ref: "#/components/responses/UnknownError"
     post:
@@ -179,6 +191,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BadEmail"
+        401:
+          description: Authentication failed
+        403:
+          description: Authorization failed
         500:
           $ref: "#/components/responses/UnknownError"
       requestBody:
@@ -207,7 +223,9 @@ paths:
         200:
           description: successful operation
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         404:
           description: Bad email with supplied ID not found
         500:
@@ -272,7 +290,9 @@ paths:
                 items:
                   $ref: "#/components/schemas/Account"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         500:
           $ref: "#/components/responses/UnknownError"
     post:
@@ -290,7 +310,9 @@ paths:
         400:
           $ref: "#/components/responses/AccountCreationValidationError"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         500:
           $ref: "#/components/responses/UnknownError"
       requestBody:
@@ -317,7 +339,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Account"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         404:
           description: Account not found
         500:
@@ -344,7 +368,9 @@ paths:
         400:
           $ref: "#/components/responses/AccountDataValidationError"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         404:
           description: Account not found
         500:
@@ -372,7 +398,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Account"
         401:
-          description: Authentication or authorization failed
+          description: Authentication failed
+        403:
+          description: Authorization failed
         404:
           description: Account not found
         500:
